@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Treningowy i Dieta 30 dni</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE6;
+  --ink: #1A1814;
+  --ink2: #5C5750;
+  --ink3: #9C9890;
+  --accent: #D4550A;
+  --accent2: #2A5C45;
+  --accent3: #1A3A8A;
+  --border: #E2DDD5;
+  --gym: #D4550A;
+  --home: #2A5C45;
+  --rest: #8A7A6A;
+  --warn: #B8440A;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* NAV TABS */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 3px solid var(--accent);
+  overflow-x: auto;
+}
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.nav-tab {
+  padding: 14px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  border: none;
+  background: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.8); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* HERO */
+.hero {
+  background: var(--ink);
+  padding: 52px 40px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  right: -80px; top: -80px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  border: 80px solid rgba(212,85,10,0.08);
+}
+.hero-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: flex-end;
+  max-width: 920px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.hero-left { flex: 1; min-width: 240px; }
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.hero h1 em { color: var(--accent); font-style: normal; }
+.hero-sub { color: rgba(255,255,255,0.45); font-size: 13px; max-width: 380px; }
+.hero-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.stat-pill {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px 18px;
+  text-align: center;
+}
+.stat-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.stat-val em { color: var(--accent); font-style: normal; }
+.stat-lbl { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* CONTAINER */
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* SECTION TITLES */
+.sec-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 40px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.sec-tag {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  font-weight: 400;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* HEALTH WARNING */
+.health-warn {
+  background: #FFF5F0;
+  border: 1px solid #F4C4AA;
+  border-left: 4px solid var(--warn);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--ink);
+  margin: 24px 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.health-warn strong { color: var(--warn); }
+
+/* LEGEND */
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink2);
+  font-weight: 500;
+}
+.leg-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* WEEK GRID */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.day-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--surface);
+}
+.day-card.gym { border-top: 3px solid var(--gym); }
+.day-card.home { border-top: 3px solid var(--home); }
+.day-card.rest { border-top: 3px solid var(--rest); background: var(--surface2); }
+.day-card-head {
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.day-name {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink3);
+}
+.day-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.gym .day-label { color: var(--gym); }
+.home .day-label { color: var(--home); }
+.rest .day-label { color: var(--rest); }
+.day-card-body {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--ink2);
+  line-height: 1.5;
+}
+.day-card-body strong { color: var(--ink); font-size: 11px; display: block; margin-bottom: 3px; }
+
+/* TRAINING DETAIL BLOCKS */
+.training-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.training-block.gym-block { border-top: 3px solid var(--gym); }
+.training-block.home-block { border-top: 3px solid var(--home); }
+.tb-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.tb-badge {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 6px;
+}
+.gym .tb-badge, .gym-block .tb-badge { background: var(--gym); color: #fff; }
+.home .tb-badge, .home-block .tb-badge { background: var(--home); color: #fff; }
+.tb-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.tb-focus {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink3);
+}
+.ex-table { width: 100%; border-collapse: collapse; }
+.ex-table th {
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  padding: 10px 22px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.ex-table td {
+  padding: 13px 22px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 13px;
+}
+.ex-table tr:last-child td { border-bottom: none; }
+.ex-table tr:hover td { background: var(--surface2); }
+.ex-name { font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.ex-sub { font-size: 11px; color: var(--ink3); }
+.sets-badge {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.gym-block .sets-badge { border-color: rgba(212,85,10,0.3); color: var(--gym); }
+.home-block .sets-badge { border-color: rgba(42,92,69,0.3); color: var(--home); }
+.tip-strip {
+  background: #F0F7F4;
+  border-top: 1px solid var(--border);
+  padding: 10px 22px;
+  font-size: 12px;
+  color: var(--ink2);
+}
+.tip-strip strong { color: var(--accent2); }
+.rest-bar {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 16px 22px;
+  text-align: center;
+  color: var(--rest);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* === DIET PAGE === */
+.kcal-card {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  margin: 28px 0;
+}
+.kcal-main { flex:1; min-width: 200px; }
+.kcal-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.kcal-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.kcal-unit { font-size: 16px; color: rgba(255,255,255,0.4); }
+.kcal-desc { color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 6px; }
+.macros { display: flex; gap: 14px; flex-wrap: wrap; }
+.macro {
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: center;
+  min-width: 80px;
+}
+.macro-val { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
+.macro-val.p { color: #5FDBA7; }
+.macro-val.c { color: #FFB347; }
+.macro-val.f { color: #A78BFF; }
+.macro-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-top: 3px; }
+
+/* DIET NOTES */
+.diet-rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.diet-rule {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 12px;
+  color: var(--ink2);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.diet-rule-icon { font-size: 18px; flex-shrink: 0; }
+.diet-rule strong { display: block; color: var(--ink); font-size: 12px; margin-bottom: 2px; }
+
+/* WEEK SELECTOR */
+.week-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.week-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.week-btn:hover { border-color: var(--accent); color: var(--accent); }
+.week-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* DIET WEEK TABLE */
+.diet-week { display: none; }
+.diet-week.active { display: block; }
+
+.diet-day-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.diet-day-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.diet-day-badge {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 5px;
+  padding: 3px 10px;
+  letter-spacing: 0.05em;
+}
+.diet-day-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+.diet-day-kcal { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--accent); }
+.diet-day-toggle { color: var(--ink3); font-size: 16px; transition: transform 0.2s; }
+.diet-day-row.open .diet-day-toggle { transform: rotate(180deg); }
+.diet-day-body {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0;
+}
+.diet-day-row.open .diet-day-body { display: grid; }
+.meal-block {
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+}
+.meal-block:last-child { border-right: none; }
+.meal-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink3);
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.meal-kcal-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.meal-name { font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 8px; }
+.meal-ing-list { list-style: none; }
+.meal-ing-list li {
+  font-size: 12px;
+  color: var(--ink2);
+  padding: 2px 0;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.meal-ing-list li::before { content:'·'; color: var(--accent); flex-shrink:0; }
+.prep-badge {
+  display: inline-block;
+  background: #EDF7F4;
+  border: 1px solid #B8E0D2;
+  color: var(--accent2);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  margin-top: 6px;
+}
+.office-badge {
+  display: inline-block;
+  background: #FFF5F0;
+  border: 1px solid #F4C4AA;
+  color: var(--gym);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  margin-top: 6px;
+}
+
+/* SHOPPING PAGE */
+.shop-intro {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 22px;
+  font-size: 13px;
+  color: var(--ink2);
+  margin: 20px 0 28px;
+}
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.shop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.shop-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.shop-cat { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+.shop-list { list-style: none; padding: 12px 18px 16px; }
+.shop-list li {
+  font-size: 13px;
+  color: var(--ink2);
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.shop-list li:last-child { border-bottom: none; }
+.shop-list li::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.shop-qty { margin-left: auto; font-size: 11px; color: var(--accent3); font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 40px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: 0.05em;
+  background: var(--surface2);
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px 28px; }
+  .wrap { padding: 0 16px; }
+  .week-grid { grid-template-columns: repeat(4, 1fr); }
+  .diet-day-body { grid-template-columns: 1fr; }
+  .meal-block { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-logo">Mój Plan</div>
+  <button class="nav-tab active" onclick="showPage('trening', this)">🏋️ Trening</button>
+  <button class="nav-tab" onclick="showPage('dieta', this)">🥗 Dieta 30 dni</button>
+  <button class="nav-tab" onclick="showPage('zakupy', this)">🛒 Zakupy</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-row">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Plan Personalny · 2026</div>
+      <h1>Trening<br>& Dieta<br><em>30 dni</em></h1>
+      <p class="hero-sub">Redukcja tkanki tłuszczowej · wysokobiałkowa · siłownia + dom · bieżnia · bez ryżu · Biedronka/Lidl</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <div class="stat-val"><em>2</em></div>
+        <div class="stat-lbl">Treningi siłownia</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val"><em>2</em></div>
+        <div class="stat-lbl">Treningi dom</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val"><em>2050</em></div>
+        <div class="stat-lbl">kcal/dzień</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val"><em>150g</em></div>
+        <div class="stat-lbl">Białko/dzień</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!--              STRONA: TRENING           -->
+<!-- ════════════════════════════════════════ -->
+<div id="page-trening" class="page active">
+<div class="wrap">
+
+  <div class="health-warn">
+    <span>⚠️</span>
+    <div><strong>Hiperlordoza:</strong> Plan budowany z myślą o bezpieczeństwie kręgosłupa. Kluczowe: plank, dead bug, superman, rozciąganie zginaczy biodra. Unikaj gwałtownych przeprostów lędźwi. Skonsultuj z fizjoterapeutą przed startem.</div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gym)"></div> Siłownia</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--home)"></div> Dom / bieżnia</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--rest)"></div> Odpoczynek</div>
+  </div>
+
+  <!-- WEEKLY OVERVIEW GRID -->
+  <div class="sec-title">Widok tygodnia <span class="sec-tag">przegląd</span></div>
+  <div class="week-grid">
+    <div class="day-card gym">
+      <div class="day-card-head">
+        <div class="day-name">Pon</div>
+        <div class="day-label">Siłownia</div>
+      </div>
+      <div class="day-card-body"><strong>Klatka + Triceps</strong>Wyciskanie, rozpiętki, dips</div>
+    </div>
+    <div class="day-card home">
+      <div class="day-card-head">
+        <div class="day-name">Wt</div>
+        <div class="day-label">Dom</div>
+      </div>
+      <div class="day-card-body"><strong>Cardio + Core</strong>Bieżnia 30 min + stabilizacja</div>
+    </div>
+    <div class="day-card rest">
+      <div class="day-card-head">
+        <div class="day-name">Śr</div>
+        <div class="day-label">Odpoczynek</div>
+      </div>
+      <div class="day-card-body">Aktywny odpoczynek, spacer, rozciąganie</div>
+    </div>
+    <div class="day-card gym">
+      <div class="day-card-head">
+        <div class="day-name">Czw</div>
+        <div class="day-label">Siłownia</div>
+      </div>
+      <div class="day-card-body"><strong>Plecy + Biceps</strong>Wiosłowanie, wyciąg, biceps</div>
+    </div>
+    <div class="day-card home">
+      <div class="day-card-head">
+        <div class="day-name">Pt</div>
+        <div class="day-label">Dom</div>
+      </div>
+      <div class="day-card-body"><strong>Góra ciała + Cardio</strong>Pompki, bieżnia interwał</div>
+    </div>
+    <div class="day-card rest">
+      <div class="day-card-head">
+        <div class="day-name">Sob</div>
+        <div class="day-label">Odpoczynek</div>
+      </div>
+      <div class="day-card-body">Spacer, rower, basen — opcjonalnie</div>
+    </div>
+    <div class="day-card rest">
+      <div class="day-card-head">
+        <div class="day-name">Nd</div>
+        <div class="day-label">Odpoczynek</div>
+      </div>
+      <div class="day-card-body">Pełna regeneracja</div>
+    </div>
+  </div>
+
+  <!-- TRENING SZCZEGÓŁY -->
+  <div class="sec-title">Szczegóły treningu <span class="sec-tag">ćwiczenia</span></div>
+
+  <!-- DZIEŃ 1: SIŁOWNIA - KLATKA + TRICEPS -->
+  <div class="training-block gym-block">
+    <div class="tb-head gym">
+      <span class="tb-badge gym">SIŁOWNIA</span>
+      <span class="tb-title">Poniedziałek — Klatka, Barki, Triceps</span>
+      <span class="tb-focus">~50 min</span>
+    </div>
+    <table class="ex-table">
+      <thead><tr><th style="width:30%">Ćwiczenie</th><th style="width:18%">Serie / Powt.</th><th>Technika</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">Wyciskanie sztangi na ławce płaskiej</div><div class="ex-sub">Klatka — podstawa</div></td>
+          <td><span class="sets-badge">4 × 10-12</span></td>
+          <td>Uchwyt nieco szerszy niż barki. Łokcie pod kątem 45° do tułowia (nie rozchylaj do 90° — chroni barki). Kontrolowane opuszczanie przez 2 sek. Plecy lekko wyłukowane naturalnie, NIE rób mostka.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Rozpiętki na maszynie (pec-deck) lub z hantlami</div><div class="ex-sub">Klatka — izolacja</div></td>
+          <td><span class="sets-badge">3 × 12-15</span></td>
+          <td>Łokcie lekko ugięte przez cały ruch. Ruch łukowy — jakbyś obejmował duże drzewo. Nie prostuj łokci w skrajnym wyciągnięciu. Pełne ściśnięcie klatki w fazie szczytowej.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Wyciskanie hantli nad głowę (barki)</div><div class="ex-sub">Deltoid przedni i boczny</div></td>
+          <td><span class="sets-badge">3 × 12</span></td>
+          <td>Siedząc na ławce z oparciem. Hantle na poziomie uszu, łokcie 90°. Wypychaj prosto w górę, nie łącz hantli nad głową. Kręgosłup lędźwiowy stabilny — unikaj przeprostu przy hiperlordozie.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Odpychanie na wyciągu górnym (triceps pushdown)</div><div class="ex-sub">Triceps</div></td>
+          <td><span class="sets-badge">3 × 15</span></td>
+          <td>Stań przodem do wyciągu, łokcie przyciśnięte do tułowia — NIE ruszają się! Odpychaj linkę / drążek w dół do pełnego wyprostu. Zwolnij powrót. Łokcie to oś ruchu.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Plank na macie (rozgrzewka + finisz)</div><div class="ex-sub">Core — hiperlordoza priorytet</div></td>
+          <td><span class="sets-badge">3 × 30 s</span></td>
+          <td>Kręgosłup neutralny — NIE opuszczaj bioder. Wciągnij pępek. Jeśli siłownia ma matę, rób na początku i końcu treningu.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tip-strip"><strong>Przerwy:</strong> 90 sek między seriami. <strong>Postęp:</strong> Co 2 tyg. zwiększ ciężar o 1-2 kg lub 1 powtórzenie.</div>
+  </div>
+
+  <!-- DZIEŃ 2: DOM - CARDIO + CORE -->
+  <div class="training-block home-block">
+    <div class="tb-head home">
+      <span class="tb-badge home">DOM</span>
+      <span class="tb-title">Wtorek — Cardio na bieżni + Core</span>
+      <span class="tb-focus">~45 min</span>
+    </div>
+    <table class="ex-table">
+      <thead><tr><th style="width:30%">Ćwiczenie</th><th style="width:18%">Czas / Serie</th><th>Technika</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">Bieżnia — Marsz szybki (rozgrzewka)</div><div class="ex-sub">5.0–5.5 km/h, nachylenie 1%</div></td>
+          <td><span class="sets-badge">5 min</span></td>
+          <td>Tempo spacerowe ale energiczne. Ramiona swobodnie. Postawa wyprostowana — glutes aktywne, brzuch lekko napięty. Nie trzymaj się bocznych uchwytów.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Bieżnia — Interwały (chód/trucht)</div><div class="ex-sub">Naprzemiennie 2 min trucht + 1 min marsz</div></td>
+          <td><span class="sets-badge">6 rund = 18 min</span></td>
+          <td>Trucht: 7.0–8.0 km/h. Marsz: 5.5 km/h. Trucht wyprostowany, ląduj śródstopiem. Oddychaj rytmicznie. Jeśli za ciężko — zamień na chód szybki 6.0 + wolny 4.5.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Bieżnia — Marsz schładzający</div><div class="ex-sub">Stopniowe wyciszenie</div></td>
+          <td><span class="sets-badge">5 min</span></td>
+          <td>Tempo 4.5–5.0 km/h. Głęboki oddech, rozluźnij ramiona. Łącznie ok. 28 min na bieżni.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Dead Bug (martwy robak)</div><div class="ex-sub">Kluczowe przy hiperlordozie</div></td>
+          <td><span class="sets-badge">3 × 8 / strona</span></td>
+          <td>Na plecach, ramiona w górę, kolana 90°. Dolny kręgosłup CAŁY CZAS przy macie. Opuszczaj naprzemiennie rękę + przeciwną nogę. Wdech przed ruchem, wydech w trakcie.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Side Plank (boczna deska)</div><div class="ex-sub">Skośne mięśnie brzucha</div></td>
+          <td><span class="sets-badge">3 × 25 s / strona</span></td>
+          <td>Na przedramieniu i boku stopy. Biodra wysoko — ciało tworzy linię. Wolna ręka na biodrze lub w górze. Nie opuszczaj miednicy.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Superman</div><div class="ex-sub">Prostowniki grzbietu</div></td>
+          <td><span class="sets-badge">3 × 12</span></td>
+          <td>Na brzuchu, ramiona wyciągnięte. Unoś jednocześnie ręce i nogi kilka cm. Trzymaj 2 sek. Głowa neutralna — patrz w dół. Wzmacnia mięśnie erector spinae słabe przy hiperlordozie.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Rozciąganie — zginacze biodra + gruszkowaty</div><div class="ex-sub">Niezbędne przy hiperlordozie!</div></td>
+          <td><span class="sets-badge">2 × 40 s / strona</span></td>
+          <td>Wykrok nisko do podłogi, opuść kolano tylne. Wypchnij biodra do przodu. Poczujesz rozciąganie z przodu biodra nogi tylnej. Zbyt napięte zginacze biodra są główną przyczyną pogłębiania lordozy.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tip-strip"><strong>Uwaga:</strong> Dzień 2 to aktywna regeneracja i spalanie — nie forsuj się. Tętno robocze: 120–145 uderzeń/min.</div>
+  </div>
+
+  <div class="rest-bar">🛌 Środa — Odpoczynek aktywny. Spacer 20-30 min, rozciąganie, basen. Bez intensywnego wysiłku.</div>
+
+  <!-- DZIEŃ 4: SIŁOWNIA - PLECY + BICEPS -->
+  <div class="training-block gym-block">
+    <div class="tb-head gym">
+      <span class="tb-badge gym">SIŁOWNIA</span>
+      <span class="tb-title">Czwartek — Plecy, Biceps, Tylne Barki</span>
+      <span class="tb-focus">~50 min</span>
+    </div>
+    <table class="ex-table">
+      <thead><tr><th style="width:30%">Ćwiczenie</th><th style="width:18%">Serie / Powt.</th><th>Technika</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">Wiosłowanie hantlem jednoręcznie</div><div class="ex-sub">Plecy — środkowa część</div></td>
+          <td><span class="sets-badge">4 × 10-12 / str.</span></td>
+          <td>Kolano i ręka oparte na ławce. Plecy równoległe do podłogi. Ciągnij hantel do biodra — łokieć wędruje wzdłuż tułowia. Ściągaj łopatkę w fazie szczytowej. Nie skręcaj tułowia.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Wyciąg górny (lat pulldown) nachwytem</div><div class="ex-sub">Szerokie plecy</div></td>
+          <td><span class="sets-badge">3 × 12-15</span></td>
+          <td>Szeroki uchwyt. Odchyl tułów 10-15° do tyłu. Ciągnij drążek do górnej części klatki ściągając łopatki w dół i do środka. Łokcie wędrują do bioder. Kontrolowany powrót.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Wiosłowanie na wyciągu poziomym (seated row)</div><div class="ex-sub">Plecy środkowe + dolne</div></td>
+          <td><span class="sets-badge">3 × 12</span></td>
+          <td>Siedząc, plecy wyprostowane (NIE garbisz się!). Ciągnij uchwyt do pępka. Ściągaj łopatki — klatka do przodu. Zwolnij powrót. Tułów nieruchomy.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Uginanie ramion ze sztangielkami (biceps curl)</div><div class="ex-sub">Biceps — klasyk</div></td>
+          <td><span class="sets-badge">3 × 12</span></td>
+          <td>Stojąc, hantle po bokach supinacją. Uginaj oba jednocześnie. Łokcie NIERUCHOME przy tułowiu — to oś ruchu. Pełen zakres: od wyprostu do maksymalnego skurczu. Bez bujania tułowiem.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Odwrotne rozpiętki na ławce (face pull / rear delt)</div><div class="ex-sub">Tylne barki + rotatory</div></td>
+          <td><span class="sets-badge">3 × 15</span></td>
+          <td>Na wyciągu lub z hantlami na ławce skośnej twarzą w dół. Ciągnij do poziomu uszu, łokcie powyżej barków. Ważne dla zdrowia barków i postawy.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tip-strip"><strong>Tip:</strong> Zadbaj o dobrą rozgrzewkę — 5 min rowerek lub bieżnia + krążenia ramionami. Na koniec: plank 2×30 sek.</div>
+  </div>
+
+  <!-- DZIEŃ 5: DOM - GÓRA + CARDIO -->
+  <div class="training-block home-block">
+    <div class="tb-head home">
+      <span class="tb-badge home">DOM</span>
+      <span class="tb-title">Piątek — Góra ciała + Interwał na bieżni</span>
+      <span class="tb-focus">~50 min</span>
+    </div>
+    <table class="ex-table">
+      <thead><tr><th style="width:30%">Ćwiczenie</th><th style="width:18%">Serie / Powt.</th><th>Technika</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">Pompki klasyczne</div><div class="ex-sub">Klatka + core</div></td>
+          <td><span class="sets-badge">4 × 10-15</span></td>
+          <td>Dłonie nieco szerzej niż barki. Ciało prosta linia. Łokcie 45°. Schodź klatką blisko podłogi. Napnij brzuch i pośladki — chroni dolny kręgosłup. Za trudno = wersja z kolan.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Pompki na wąskim chwycie (diament)</div><div class="ex-sub">Triceps + klatka środkowa</div></td>
+          <td><span class="sets-badge">3 × 8-10</span></td>
+          <td>Dłonie złączone pod klatką. Łokcie blisko ciała przez cały ruch. Opuszczaj powoli (3 sek), wróć szybciej.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Pike Push-ups (kształt V)</div><div class="ex-sub">Barki</div></td>
+          <td><span class="sets-badge">3 × 8-12</span></td>
+          <td>Pompka w kształcie odwróconego V — biodra wysoko. Opuszczaj głowę między rękami. Imituje wyciskanie nad głowę. Ręce na szerokość barków.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Odwrotne pompki na krześle (Triceps Dips)</div><div class="ex-sub">Triceps</div></td>
+          <td><span class="sets-badge">3 × 12</span></td>
+          <td>Ręce na krawędzi krzesła/kanapy. Nogi proste lub ugięte. Opuszczaj ciało zginając łokcie do 90°. Plecy blisko krzesła przez cały ruch.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Bieżnia — Szybki marsz ze zmiennym nachyleniem</div><div class="ex-sub">Cardio anty-lordotyczne</div></td>
+          <td><span class="sets-badge">20 min</span></td>
+          <td>5 min — 5 km/h, nachylenie 1%. 5 min — 5.5 km/h, nachylenie 5%. 5 min — 5.5 km/h, nachylenie 8%. 5 min — 5 km/h, nachylenie 1% (schłodzenie). Marsz z nachyleniem oszczędza stawy i kręgosłup vs bieg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Plank + Dead Bug (finisz)</div><div class="ex-sub">Core — obowiązkowe</div></td>
+          <td><span class="sets-badge">2 × 30s + 2×6/str</span></td>
+          <td>Plank na przedramionach 30 sek, przerwa 30 sek, Dead Bug 6 powtórzeń na stronę. Spokojne oddychanie.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tip-strip"><strong>Uwaga:</strong> Piątkowy trening to domknięcie tygodnia — intensywność umiarkowana, dobra jakość ruchu ważniejsza niż ciężar.</div>
+  </div>
+
+  <div class="rest-bar">🛌 Sobota & Niedziela — Regeneracja. Dwie opcje: (1) pasywna — leżak, sen. (2) aktywna — spacer, basen, rower. NIE biegaj, nie rób nic intensywnego.</div>
+
+</div><!-- /wrap trening -->
+</div><!-- /page trening -->
+
+<!-- ════════════════════════════════════════ -->
+<!--           STRONA: DIETA 30 DNI         -->
+<!-- ════════════════════════════════════════ -->
+<div id="page-dieta" class="page">
+<div class="wrap">
+
+  <div class="kcal-card">
+    <div class="kcal-main">
+      <div class="kcal-eyebrow">Zapotrzebowanie kaloryczne (deficyt −500 kcal)</div>
+      <div><span class="kcal-num">2050</span> <span class="kcal-unit">kcal/dzień</span></div>
+      <div class="kcal-desc">BMR ~1920 kcal × 1,375 (mała aktywność) = TDEE ~2550 kcal · Deficyt −500 kcal · Ubytek ~0,4–0,6 kg/tydzień</div>
+    </div>
+    <div class="macros">
+      <div class="macro"><div class="macro-val p">155g</div><div class="macro-lbl">Białko</div></div>
+      <div class="macro"><div class="macro-val c">210g</div><div class="macro-lbl">Węglowodany</div></div>
+      <div class="macro"><div class="macro-val f">62g</div><div class="macro-lbl">Tłuszcze</div></div>
+    </div>
+  </div>
+
+  <div class="diet-rules">
+    <div class="diet-rule"><div class="diet-rule-icon">🌙</div><div><strong>Przygotuj dzień wcześniej</strong>Owsianki nocne, koktajle w słoiku, makarony w pojemnikach — gotowe rano lub do lodówki</div></div>
+    <div class="diet-rule"><div class="diet-rule-icon">♨️</div><div><strong>Odgrzewalne obiady</strong>Wszystkie obiady nadają się do mikrofalówki. Przepis na 2 porcje = 1 na miejscu + 1 do pracy</div></div>
+    <div class="diet-rule"><div class="diet-rule-icon">💪</div><div><strong>Skyr w centrum diety</strong>Skyr to baza — śniadania, przekąski, desery. ~11g białka na 100g przy ~60 kcal</div></div>
+    <div class="diet-rule"><div class="diet-rule-icon">🏢</div><div><strong>3 dni biurowe (Wt/Śr/Czw)</strong>Obiady zapakowane w pojemniku. Śniadania: shake lub kanapki (zrób rano, max 5 min)</div></div>
+    <div class="diet-rule"><div class="diet-rule-icon">🚫</div><div><strong>Bez ryżu, bez jajecznicy</strong>Baza: makaron, ziemniaki, kasza, pieczywo razowe, płatki owsiane</div></div>
+    <div class="diet-rule"><div class="diet-rule-icon">🛒</div><div><strong>Biedronka + Lidl</strong>Wszystkie produkty dostępne w obu sieciach. Skyr: Lidl (Milbona) lub Biedronka (własna marka)</div></div>
+  </div>
+
+  <div class="sec-title">Jadłospis <span class="sec-tag">kliknij dzień aby rozwinąć</span></div>
+
+  <!-- WEEK SELECTOR -->
+  <div class="week-selector">
+    <button class="week-btn active" onclick="showWeek(1, this)">Tydzień 1 (Dni 1–7)</button>
+    <button class="week-btn" onclick="showWeek(2, this)">Tydzień 2 (Dni 8–14)</button>
+    <button class="week-btn" onclick="showWeek(3, this)">Tydzień 3 (Dni 15–21)</button>
+    <button class="week-btn" onclick="showWeek(4, this)">Tydzień 4 (Dni 22–30)</button>
+  </div>
+
+  <!-- TYDZIEŃ 1 -->
+  <div id="week-1" class="diet-week active">
+
+    <!-- DZIEŃ 1 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 1 · Pon</span>
+        <span class="diet-day-title">Owsianka nocna · Kurczak z makaronem · Skyr z owocami</span>
+        <span class="diet-day-kcal">~2060 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~490 kcal</span></div>
+          <div class="meal-name">Owsianka nocna z bananem i skyrem</div>
+          <ul class="meal-ing-list">
+            <li>Płatki owsiane górskie — 80g</li>
+            <li>Skyr naturalny — 150g</li>
+            <li>Mleko 2% — 100ml</li>
+            <li>Banan — 1 szt.</li>
+            <li>Miód — 1 łyżeczka</li>
+            <li>Cynamon — szczypta</li>
+          </ul>
+          <span class="prep-badge">📦 Przygotuj wieczorem w słoiku</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~670 kcal</span></div>
+          <div class="meal-name">Makaron penne z kurczakiem i pomidorami</div>
+          <ul class="meal-ing-list">
+            <li>Pierś z kurczaka — 180g</li>
+            <li>Makaron penne pełnoziarnisty — 100g (suchy)</li>
+            <li>Passata pomidorowa — 200ml</li>
+            <li>Papryka czerwona — ½ szt.</li>
+            <li>Oliwa — 1 łyżka</li>
+            <li>Czosnek, bazylia, sól</li>
+          </ul>
+          <span class="prep-badge">♨️ Odgrzewalne w mikrofali</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~460 kcal</span></div>
+          <div class="meal-name">Skyr z ogórkiem i kanapki z twarogiem</div>
+          <ul class="meal-ing-list">
+            <li>Skyr naturalny — 200g</li>
+            <li>Ogórek — ½ szt.</li>
+            <li>Rzodkiewki — 5 szt.</li>
+            <li>Chleb razowy — 2 kromki</li>
+            <li>Twaróg półtłusty — 80g</li>
+            <li>Szczypiorek, sól, pieprz</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 2 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 2 · Wt 🏢</span>
+        <span class="diet-day-title">Shake proteinowy · Zupa z indykiem · Twaróg z warzywami</span>
+        <span class="diet-day-kcal">~2040 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~470 kcal</span></div>
+          <div class="meal-name">Shake bananowo-kakaowy ze skyrem</div>
+          <ul class="meal-ing-list">
+            <li>Skyr naturalny — 200g</li>
+            <li>Banan — 1 szt.</li>
+            <li>Mleko 2% — 200ml</li>
+            <li>Kakao gorzkie — 1 łyżka</li>
+            <li>Płatki owsiane — 3 łyżki (30g)</li>
+          </ul>
+          <span class="office-badge">🏢 Zrób rano, wstrząśnij w słoiku</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~680 kcal</span></div>
+          <div class="meal-name">Zupa pomidorowa z mięsem mielonym z indyka i makaronem</div>
+          <ul class="meal-ing-list">
+            <li>Mięso mielone z indyka — 200g</li>
+            <li>Passata — 300ml</li>
+            <li>Makaron świderki — 80g (suchy)</li>
+            <li>Cebula — ½ szt., czosnek — 2 ząbki</li>
+            <li>Oliwa — 1 łyżka</li>
+            <li>Oregano, sól, pieprz</li>
+          </ul>
+          <span class="office-badge">🏢 W pojemniku do pracy</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~430 kcal</span></div>
+          <div class="meal-name">Twaróg ze szczypiorkiem i chleb</div>
+          <ul class="meal-ing-list">
+            <li>Twaróg półtłusty — 250g</li>
+            <li>Szczypiorek, rzodkiewki</li>
+            <li>Chleb razowy — 2 kromki</li>
+            <li>Pomidor — 1 szt.</li>
+            <li>Sól, pieprz</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 3 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 3 · Śr 🏢</span>
+        <span class="diet-day-title">Kanapki z serem · Kasza z warzywami · Skyr z malinami</span>
+        <span class="diet-day-kcal">~2030 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~450 kcal</span></div>
+          <div class="meal-name">Kanapki z twarogiem, pomidorem i serem</div>
+          <ul class="meal-ing-list">
+            <li>Chleb pełnoziarnisty — 3 kromki</li>
+            <li>Twaróg chudy — 150g</li>
+            <li>Ser żółty (Gouda/Edam) — 2 plastry</li>
+            <li>Pomidor — 1 szt.</li>
+            <li>Sałata, sól, pieprz</li>
+          </ul>
+          <span class="office-badge">🏢 Zrób rano, zawiń w folię</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div>
+          <div class="meal-name">Kasza gryczana z pieczonym kurczakiem i surówką</div>
+          <ul class="meal-ing-list">
+            <li>Pierś z kurczaka — 180g</li>
+            <li>Kasza gryczana — 80g (sucha)</li>
+            <li>Marchew — 2 szt.</li>
+            <li>Kapusta biała — 100g</li>
+            <li>Oliwa — 1 łyżka</li>
+            <li>Papryka, sól, zioła</li>
+          </ul>
+          <span class="office-badge">🏢 W pojemniku do pracy</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Skyr z malinami i granolą</div>
+          <ul class="meal-ing-list">
+            <li>Skyr naturalny — 300g</li>
+            <li>Maliny mrożone — 100g</li>
+            <li>Granola bez cukru — 40g</li>
+            <li>Miód — 1 łyżeczka</li>
+          </ul>
+          <span class="prep-badge">📦 Przygotuj wieczorem w misce</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 4 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 4 · Czw 🏢</span>
+        <span class="diet-day-title">Owsianka nocna · Ziemniaki z kurczakiem · Skyr z ogórkiem</span>
+        <span class="diet-day-kcal">~2050 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~480 kcal</span></div>
+          <div class="meal-name">Owsianka nocna z jabłkiem i cynamonem</div>
+          <ul class="meal-ing-list">
+            <li>Płatki owsiane — 80g</li>
+            <li>Skyr waniliowy — 150g</li>
+            <li>Mleko — 100ml</li>
+            <li>Jabłko — 1 szt. (starte)</li>
+            <li>Cynamon, miód — 1 łyżeczka</li>
+          </ul>
+          <span class="prep-badge">📦 Przygotuj wieczorem</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~660 kcal</span></div>
+          <div class="meal-name">Pieczone ziemniaki z kurczakiem i warzywami</div>
+          <ul class="meal-ing-list">
+            <li>Pierś z kurczaka — 200g</li>
+            <li>Ziemniaki — 300g</li>
+            <li>Cukinia — ½ szt.</li>
+            <li>Papryka — ½ szt.</li>
+            <li>Oliwa — 1 łyżka</li>
+            <li>Rozmaryn, sól, czosnek</li>
+          </ul>
+          <span class="office-badge">🏢 W pojemniku do pracy</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~430 kcal</span></div>
+          <div class="meal-name">Skyr z warzywami i chleb razowy</div>
+          <ul class="meal-ing-list">
+            <li>Skyr naturalny — 250g</li>
+            <li>Ogórek — ½ szt.</li>
+            <li>Szczypiorek, koperek</li>
+            <li>Chleb razowy — 2 kromki</li>
+            <li>Sól, pieprz</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 5 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 5 · Pt</span>
+        <span class="diet-day-title">Shake z kefiru · Makaron z tuńczykiem · Kanapki z indykiem</span>
+        <span class="diet-day-kcal">~2060 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~460 kcal</span></div>
+          <div class="meal-name">Shake kefirowy z bananem i owsem</div>
+          <ul class="meal-ing-list">
+            <li>Kefir 2% — 300ml</li>
+            <li>Banan — 1 szt.</li>
+            <li>Płatki owsiane — 40g</li>
+            <li>Kakao — 1 łyżeczka</li>
+            <li>Miód — 1 łyżeczka</li>
+          </ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div>
+          <div class="meal-name">Makaron z tuńczykiem i warzywami</div>
+          <ul class="meal-ing-list">
+            <li>Tuńczyk w wodzie — 2 puszki (280g)</li>
+            <li>Makaron pełnoziarnisty — 100g (suchy)</li>
+            <li>Pomidory z puszki — 200g</li>
+            <li>Kukurydza — 3 łyżki</li>
+            <li>Oliwa, czosnek, oregano</li>
+          </ul>
+          <span class="prep-badge">♨️ Odgrzewalne</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~470 kcal</span></div>
+          <div class="meal-name">Kanapki z wędliną drobiową i skyrem</div>
+          <ul class="meal-ing-list">
+            <li>Chleb razowy — 3 kromki</li>
+            <li>Wędlina drobiowa (pierś) — 80g</li>
+            <li>Skyr naturalny — 100g (jako pasta)</li>
+            <li>Pomidor, ogórek</li>
+            <li>Sałata, musztarda</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 6 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 6 · Sob</span>
+        <span class="diet-day-title">Pancakes proteinowe · Gulasz z indyka · Skyr z granolą</span>
+        <span class="diet-day-kcal">~2070 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~500 kcal</span></div>
+          <div class="meal-name">Pancakes z bananem i skyrem (sobotnia rozkosz)</div>
+          <ul class="meal-ing-list">
+            <li>Mąka owsiana — 80g (zmiksuj płatki)</li>
+            <li>Jajko — 1 szt. (do ciasta)</li>
+            <li>Skyr — 100g (w cieście)</li>
+            <li>Mleko — 50ml</li>
+            <li>Banan — 1 szt. (jako topping)</li>
+            <li>Odrobina masła do smażenia</li>
+          </ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~680 kcal</span></div>
+          <div class="meal-name">Gulasz z indyka z kaszą gryczaną</div>
+          <ul class="meal-ing-list">
+            <li>Mięso z indyka (udo/filet) — 220g</li>
+            <li>Kasza gryczana — 80g (sucha)</li>
+            <li>Cebula, papryka, marchew</li>
+            <li>Pomidory z puszki — 200g</li>
+            <li>Oliwa — 1 łyżka</li>
+            <li>Majeranek, sól, pieprz</li>
+          </ul>
+          <span class="prep-badge">♨️ Zrób więcej — zostaw na jutro</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~450 kcal</span></div>
+          <div class="meal-name">Skyr z granolą i owocami</div>
+          <ul class="meal-ing-list">
+            <li>Skyr naturalny — 300g</li>
+            <li>Granola bez cukru — 50g</li>
+            <li>Jabłko lub maliny — 100g</li>
+            <li>Miód — 1 łyżeczka</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DZIEŃ 7 -->
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 7 · Nd</span>
+        <span class="diet-day-title">Owsianka · Gulasz (resztki) · Sałatka z tuńczykiem</span>
+        <span class="diet-day-kcal">~2040 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~490 kcal</span></div>
+          <div class="meal-name">Owsianka z jabłkiem i skyrem — ciepła wersja</div>
+          <ul class="meal-ing-list">
+            <li>Płatki owsiane — 80g</li>
+            <li>Mleko — 200ml (ugotuj)</li>
+            <li>Skyr — 100g (na wierzch)</li>
+            <li>Jabłko — 1 szt. (starte, duszone)</li>
+            <li>Cynamon, miód</li>
+          </ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div>
+          <div class="meal-name">Resztki gulaszu + kasza (z soboty)</div>
+          <ul class="meal-ing-list">
+            <li>Gulasz z indyka — porcja z dnia 6</li>
+            <li>Kasza gryczana — dodatkowe 60g</li>
+            <li>Ogórek kiszony — 2 szt.</li>
+          </ul>
+          <span class="prep-badge">📦 Zero waste — gotowe!</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Sałatka z tuńczykiem i jajkiem</div>
+          <ul class="meal-ing-list">
+            <li>Tuńczyk w wodzie — 1 puszka (140g)</li>
+            <li>Jajko ugotowane — 2 szt.</li>
+            <li>Sałata lodowa — 100g</li>
+            <li>Pomidor, kukurydza</li>
+            <li>Oliwa, sok z cytryny</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /week-1 -->
+
+  <!-- TYDZIEŃ 2 -->
+  <div id="week-2" class="diet-week">
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 8 · Pon</span>
+        <span class="diet-day-title">Owsianka nocna z truskawkami · Kotlet z indyka · Skyr z warzywami</span>
+        <span class="diet-day-kcal">~2050 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~480 kcal</span></div>
+          <div class="meal-name">Owsianka nocna ze skyrem i truskawkami</div>
+          <ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Skyr truskawkowy — 150g</li><li>Mleko — 100ml</li><li>Truskawki mrożone — 80g</li><li>Miód — 1 łyżeczka</li></ul>
+          <span class="prep-badge">📦 Przygotuj wieczorem</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~660 kcal</span></div>
+          <div class="meal-name">Kotlet mielony z indyka z ziemniakami i surówką</div>
+          <ul class="meal-ing-list"><li>Mięso mielone z indyka — 220g</li><li>Bułka tarta — 1 łyżka</li><li>Ziemniaki — 250g</li><li>Kapusta z marchewką — surówka 150g</li><li>Oliwa — 1 łyżeczka</li></ul>
+          <span class="prep-badge">♨️ Odgrzewalne</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Skyr z twarogiem i chleb</div>
+          <ul class="meal-ing-list"><li>Skyr naturalny — 200g</li><li>Twaróg — 100g</li><li>Ogórek, rzodkiewki</li><li>Chleb razowy — 2 kromki</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 9 · Wt 🏢</span>
+        <span class="diet-day-title">Shake bananowy · Zupa jarzynowa z kurczakiem · Kanapki</span>
+        <span class="diet-day-kcal">~2040 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~460 kcal</span></div>
+          <div class="meal-name">Shake proteinowy z kefiru i owoców</div>
+          <ul class="meal-ing-list"><li>Kefir — 250ml</li><li>Skyr — 150g</li><li>Banan — 1 szt.</li><li>Truskawki mrożone — 80g</li><li>Miód — 1 łyżeczka</li></ul>
+          <span class="office-badge">🏢 Zrób rano, 2 min!</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div>
+          <div class="meal-name">Zupa jarzynowa z kawałkami kurczaka i makaronem</div>
+          <ul class="meal-ing-list"><li>Pierś kurczaka — 160g</li><li>Makaron — 60g (suchy)</li><li>Marchew, pietruszka, por — mix warzyw</li><li>Bulion, sól, lubczyk, pieprz</li></ul>
+          <span class="office-badge">🏢 W termosie lub pojemniku</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~450 kcal</span></div>
+          <div class="meal-name">Kanapki z serem i wędliną drobiową</div>
+          <ul class="meal-ing-list"><li>Chleb razowy — 3 kromki</li><li>Ser żółty — 3 plastry</li><li>Wędlina drobiowa — 60g</li><li>Pomidor, sałata, musztarda</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 10 · Śr 🏢</span>
+        <span class="diet-day-title">Owsianka nocna · Makaron bolognese · Skyr z granolą</span>
+        <span class="diet-day-kcal">~2060 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~490 kcal</span></div>
+          <div class="meal-name">Owsianka nocna z kakao i skyrem</div>
+          <ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Skyr naturalny — 150g</li><li>Mleko — 100ml</li><li>Kakao — 1 łyżka</li><li>Banan — ½ szt., miód</li></ul>
+          <span class="prep-badge">📦 Wieczór przed</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~670 kcal</span></div>
+          <div class="meal-name">Bolognese z makaronem (mięso mielone z indyka)</div>
+          <ul class="meal-ing-list"><li>Mięso mielone indyk — 200g</li><li>Makaron spaghetti pełnoziarnisty — 90g</li><li>Passata — 250ml</li><li>Cebula, czosnek, marchew — drobno</li><li>Oliwa, oregano, sól</li></ul>
+          <span class="office-badge">🏢 Pojemnik do pracy</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Skyr z granolą i owocami</div>
+          <ul class="meal-ing-list"><li>Skyr — 300g</li><li>Granola — 40g</li><li>Jabłko — 1 szt.</li><li>Miód — 1 łyżeczka</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 11 · Czw 🏢</span>
+        <span class="diet-day-title">Shake z skyrem · Kasza z kurczakiem · Twaróg</span>
+        <span class="diet-day-kcal">~2050 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~470 kcal</span></div>
+          <div class="meal-name">Shake ze skyrem, jabłkiem i cynamonem</div>
+          <ul class="meal-ing-list"><li>Skyr waniliowy — 200g</li><li>Mleko — 200ml</li><li>Jabłko — 1 szt.</li><li>Cynamon — szczypta</li><li>Płatki owsiane — 30g</li></ul>
+          <span class="office-badge">🏢 Zblenduj rano</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div>
+          <div class="meal-name">Kasza gryczana z kurczakiem i brokułami</div>
+          <ul class="meal-ing-list"><li>Pierś kurczaka — 180g</li><li>Kasza gryczana — 80g</li><li>Brokuły — 150g</li><li>Oliwa — 1 łyżka</li><li>Czosnek, sól, cytryna</li></ul>
+          <span class="office-badge">🏢 Pojemnik do pracy</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Twaróg z warzywami i chleb razowy</div>
+          <ul class="meal-ing-list"><li>Twaróg półtłusty — 250g</li><li>Ogórek, rzodkiewki, szczypiorek</li><li>Chleb razowy — 2 kromki</li><li>Sól, pieprz</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 12 · Pt</span>
+        <span class="diet-day-title">Owsianka · Makaron z łososiem · Skyr z warzywami</span>
+        <span class="diet-day-kcal">~2070 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~490 kcal</span></div>
+          <div class="meal-name">Owsianka z jogurtem i malinami</div>
+          <ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Jogurt naturalny — 150g</li><li>Skyr — 100g</li><li>Maliny mrożone — 80g</li><li>Miód — 1 łyżeczka</li></ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~680 kcal</span></div>
+          <div class="meal-name">Makaron z łososiem i śmietaną (light)</div>
+          <ul class="meal-ing-list"><li>Łosoś z puszki lub filety — 180g</li><li>Makaron penne — 90g</li><li>Śmietana 12% — 3 łyżki</li><li>Szpinak — garść</li><li>Czosnek, koperek, sól</li></ul>
+          <span class="prep-badge">♨️ Odgrzewalne</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Skyr z ogórkiem kiszonym i kanapka</div>
+          <ul class="meal-ing-list"><li>Skyr naturalny — 250g</li><li>Ogórek kiszony — 2 szt.</li><li>Chleb razowy — 2 kromki</li><li>Wędlina drobiowa — 50g</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 13 · Sob</span>
+        <span class="diet-day-title">Pancakes · Pieczony indyk z warzywami · Skyr z granolą</span>
+        <span class="diet-day-kcal">~2060 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~510 kcal</span></div>
+          <div class="meal-name">Pancakes ze skyrem i malinami</div>
+          <ul class="meal-ing-list"><li>Mąka owsiana — 80g</li><li>Jajko — 1 szt.</li><li>Skyr — 100g</li><li>Mleko — 50ml</li><li>Maliny — topping</li><li>Miód — 1 łyżka</li></ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~660 kcal</span></div>
+          <div class="meal-name">Pieczony filet z indyka z ziemniakami i brokułami</div>
+          <ul class="meal-ing-list"><li>Filet z indyka — 220g</li><li>Ziemniaki — 250g</li><li>Brokuły — 150g</li><li>Oliwa — 1 łyżka</li><li>Czosnek, tymianek, sól</li></ul>
+          <span class="prep-badge">♨️ Zrób więcej — resztki na jutro</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~430 kcal</span></div>
+          <div class="meal-name">Skyr z granolą i jabłkiem</div>
+          <ul class="meal-ing-list"><li>Skyr — 300g</li><li>Granola — 40g</li><li>Jabłko — 1 szt.</li><li>Cynamon</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head">
+        <span class="diet-day-badge">Dzień 14 · Nd</span>
+        <span class="diet-day-title">Owsianka · Resztki indyka · Sałatka z tuńczykiem</span>
+        <span class="diet-day-kcal">~2040 kcal</span>
+        <span class="diet-day-toggle">▼</span>
+      </div>
+      <div class="diet-day-body">
+        <div class="meal-block">
+          <div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~480 kcal</span></div>
+          <div class="meal-name">Owsianka z bananem i skyrem</div>
+          <ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Skyr — 150g</li><li>Mleko — 150ml</li><li>Banan — 1 szt.</li><li>Miód, cynamon</li></ul>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~640 kcal</span></div>
+          <div class="meal-name">Resztki indyka z ziemniakami (z soboty)</div>
+          <ul class="meal-ing-list"><li>Indyk + warzywa — porcja z dnia 13</li><li>Ogórek kiszony — 2 szt.</li></ul>
+          <span class="prep-badge">📦 Zero waste!</span>
+        </div>
+        <div class="meal-block">
+          <div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div>
+          <div class="meal-name">Sałatka z tuńczykiem, skyrem i warzywami</div>
+          <ul class="meal-ing-list"><li>Tuńczyk — 1 puszka (140g)</li><li>Skyr — 100g (jako dressing)</li><li>Sałata, pomidor, kukurydza</li><li>Sok cytryny, sól</li></ul>
+        </div>
+      </div>
+    </div>
+  </div><!-- /week-2 -->
+
+  <!-- TYDZIEŃ 3 -->
+  <div id="week-3" class="diet-week">
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dzień 15 · Pon</span><span class="diet-day-title">Owsianka nocna · Kurczak z kaszą jaglaną · Skyr</span><span class="diet-day-kcal">~2050 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block"><div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~490 kcal</span></div><div class="meal-name">Owsianka nocna z orzechami i skyrem</div><ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Skyr naturalny — 150g</li><li>Mleko — 100ml</li><li>Orzechy włoskie — 20g</li><li>Miód, cynamon</li></ul><span class="prep-badge">📦 Wieczór przed</span></div>
+        <div class="meal-block"><div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~650 kcal</span></div><div class="meal-name">Kurczak w sosie curry z kaszą jaglaną</div><ul class="meal-ing-list"><li>Pierś z kurczaka — 180g</li><li>Kasza jaglana — 80g (sucha)</li><li>Cebula, papryka</li><li>Mleczko kokosowe light — 100ml</li><li>Curry, sól, czosnek</li></ul><span class="prep-badge">♨️ Odgrzewalne</span></div>
+        <div class="meal-block"><div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div><div class="meal-name">Skyr z warzywami i chleb razowy</div><ul class="meal-ing-list"><li>Skyr — 250g</li><li>Ogórek, rzodkiewki</li><li>Chleb razowy — 2 kromki</li><li>Sól, koperek</li></ul></div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dzień 16 · Wt 🏢</span><span class="diet-day-title">Shake kakaowy · Makaron z indykiem · Twaróg</span><span class="diet-day-kcal">~2040 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block"><div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~460 kcal</span></div><div class="meal-name">Shake kakaowy ze skyrem i bananem</div><ul class="meal-ing-list"><li>Skyr — 200g</li><li>Mleko — 200ml</li><li>Kakao — 1 łyżka</li><li>Banan — 1 szt.</li><li>Miód — 1 łyżeczka</li></ul><span class="office-badge">🏢 2 min rano</span></div>
+        <div class="meal-block"><div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~660 kcal</span></div><div class="meal-name">Makaron z mięsem mielonym z indyka i papryką</div><ul class="meal-ing-list"><li>Mięso mielone indyk — 200g</li><li>Makaron pełnoziarnisty — 90g</li><li>Papryka czerwona — 1 szt.</li><li>Pomidory z puszki — 200g</li><li>Czosnek, bazylia, oliwa</li></ul><span class="office-badge">🏢 Pojemnik do pracy</span></div>
+        <div class="meal-block"><div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~440 kcal</span></div><div class="meal-name">Twaróg ze skyrem i kanapki</div><ul class="meal-ing-list"><li>Twaróg — 150g</li><li>Skyr — 100g</li><li>Szczypiorek, ogórek</li><li>Chleb razowy — 2 kromki</li></ul></div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dzień 17–21</span><span class="diet-day-title">Powtórz rotację z Tygodnia 1–2 z wariacjami</span><span class="diet-day-kcal">~2050 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block" style="grid-column: 1/-1; padding: 20px;">
+          <div class="meal-name" style="margin-bottom: 12px;">📋 Wskazówki na Tydzień 3 (Dni 17–21)</div>
+          <ul class="meal-ing-list">
+            <li>Śniadania rotuj: owsianka nocna / shake ze skyrem / kanapki z twarogiem — naprzemiennie</li>
+            <li>Obiady: możesz powtarzać ulubione z Tygodnia 1–2 lub dodać: kasza jaglana z tuńczykiem, pierogi leniwe ze skyrem (zamiast twarogu)</li>
+            <li>Kolacje: baza zawsze skyr lub twaróg + warzywa + opcjonalnie 2 kromki chleba</li>
+            <li>Jeden dzień w tygodniu zrób "batch cooking" — ugotuj kaszę lub makaron na 2 dni</li>
+            <li>Pamiętaj: 3 dni biurowe (Wt/Śr/Czw) — obiady w pojemniku, śniadanie max 5 min</li>
+          </ul>
+          <div style="margin-top: 14px; font-size: 12px; color: var(--ink3);">
+            <strong style="color: var(--accent2);">Nowe propozycje na tydzień 3:</strong><br>
+            🆕 Obiad: Pierogi leniwe (skyr/twaróg + mąka + jajko) z masłem i cynamonem ~580 kcal<br>
+            🆕 Obiad: Zupa krem brokułowa z grzankami i piersią z kurczaka ~620 kcal<br>
+            🆕 Śniadanie: Budyń owsiany z kakao i skyrem na wierzchu ~470 kcal
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /week-3 -->
+
+  <!-- TYDZIEŃ 4 -->
+  <div id="week-4" class="diet-week">
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dzień 22 · Pon</span><span class="diet-day-title">Owsianka nocna z orzechami · Kurczak z rynotrawy... kaszą · Skyr</span><span class="diet-day-kcal">~2060 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block"><div class="meal-type">🌅 Śniadanie <span class="meal-kcal-badge">~500 kcal</span></div><div class="meal-name">Owsianka nocna z masłem orzechowym i skyrem</div><ul class="meal-ing-list"><li>Płatki owsiane — 80g</li><li>Skyr naturalny — 150g</li><li>Mleko — 100ml</li><li>Masło orzechowe — 1 łyżka (15g)</li><li>Banan — ½ szt., miód</li></ul><span class="prep-badge">📦 Wieczór przed</span></div>
+        <div class="meal-block"><div class="meal-type">☀️ Obiad <span class="meal-kcal-badge">~670 kcal</span></div><div class="meal-name">Kurczak w sosie pomidorowym z kaszą gryczaną</div><ul class="meal-ing-list"><li>Pierś z kurczaka — 200g</li><li>Kasza gryczana — 80g</li><li>Pomidory z puszki — 250g</li><li>Cebula, czosnek, papryka</li><li>Oliwa, oregano, sól</li></ul><span class="prep-badge">♨️ Odgrzewalne</span></div>
+        <div class="meal-block"><div class="meal-type">🌙 Kolacja <span class="meal-kcal-badge">~450 kcal</span></div><div class="meal-name">Skyr z granolą i owocami sezonowymi</div><ul class="meal-ing-list"><li>Skyr — 300g</li><li>Granola — 40g</li><li>Owoce sezonowe — 100g</li><li>Miód — 1 łyżeczka</li></ul></div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dzień 23–25 · Wt-Czw 🏢</span><span class="diet-day-title">3 dni biurowe — schemat tygodniowy</span><span class="diet-day-kcal">~2050 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block" style="grid-column:1/-1; padding:20px;">
+          <div class="meal-name" style="margin-bottom:12px;">🏢 Tygodniowy schemat na dni biurowe (Wt/Śr/Czw)</div>
+          <ul class="meal-ing-list">
+            <li><strong>Wt Śniadanie:</strong> Shake ze skyrem + banan + mleko + płatki (blender, 3 min)</li>
+            <li><strong>Wt Obiad:</strong> Bolognese z indyka z makaronem (w pojemniku)</li>
+            <li><strong>Śr Śniadanie:</strong> 3 kanapki z twarogiem + pomidor + ser (5 min rano)</li>
+            <li><strong>Śr Obiad:</strong> Kasza gryczana z kurczakiem i brokułami (pojemnik)</li>
+            <li><strong>Czw Śniadanie:</strong> Owsianka nocna z skyrem (zrób Śr wieczorem)</li>
+            <li><strong>Czw Obiad:</strong> Makaron z tuńczykiem i warzywami (pojemnik)</li>
+            <li>Kolacje: skyr lub twaróg z warzywami i 2 cromki chleba — stały schemat</li>
+          </ul>
+          <div style="margin-top:14px; font-size:12px; color:var(--accent2); font-weight:600;">
+            ✅ W 4. tygodniu zacznij ważyć składniki — to buduje nawyk i świadomość kaloryczną na długoterminowo.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="diet-day-row" onclick="toggleDay(this)">
+      <div class="diet-day-head"><span class="diet-day-badge">Dni 26–30 · Pt-Wt</span><span class="diet-day-title">Rotacja najlepszych z miesiąca + nowa propozycja</span><span class="diet-day-kcal">~2050 kcal</span><span class="diet-day-toggle">▼</span></div>
+      <div class="diet-day-body">
+        <div class="meal-block" style="grid-column:1/-1; padding:20px;">
+          <div class="meal-name" style="margin-bottom:12px;">🏆 Finisz 30 dni — Podsumowanie i nowe propozycje</div>
+          <ul class="meal-ing-list">
+            <li>Powtórz 3–4 ulubione obiady z poprzednich tygodni (masz już opanowane techniki)</li>
+            <li>🆕 Obiad: Pieczona pierś z kurczaka w marynacie cytrynowo-czosnkowej + makaron + sałatka ~660 kcal</li>
+            <li>🆕 Obiad: Zupa krem z dyni (sezon jesienny/zimowy) z grzankami i skyrem ~580 kcal</li>
+            <li>🆕 Śniadanie: Mugcake owsiany z kakao i skyrem (mikrofalówka, 3 min!) ~460 kcal</li>
+            <li>🆕 Kolacja: Skyr z miodem i orzechami jako wieczorny pudding proteinowy ~350 kcal</li>
+          </ul>
+          <div style="margin-top:14px; background:#F0F7F4; border-radius:8px; padding:14px;">
+            <strong style="color:var(--accent2);">Po 30 dniach oceń:</strong> Jak zmienił się Twój stosunek do jedzenia? Czy obiady do pracy stały się rutyną? Teraz możesz zacząć liczyć białko precyzyjnie lub rozszerzyć repertuar przepisów. Cel: 155g białka/dzień ≈ dobry poziom przy 85kg i redukcji.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /week-4 -->
+
+</div><!-- /wrap dieta -->
+</div><!-- /page dieta -->
+
+<!-- ════════════════════════════════════════ -->
+<!--           STRONA: ZAKUPY               -->
+<!-- ════════════════════════════════════════ -->
+<div id="page-zakupy" class="page">
+<div class="wrap">
+
+  <div class="shop-intro">
+    🛒 Lista zakupów na <strong>1 tydzień</strong> (pełna dieta wysokobiałkowa). Kupuj w Biedronce lub Lidlu. Skyr: Milbona (Lidl) lub własna marka (Biedronka). Szacowany koszt: <strong>~140–180 zł / tydzień</strong>.
+  </div>
+
+  <div class="sec-title">Lista zakupów <span class="sec-tag">tygodniowa</span></div>
+
+  <div class="shop-grid">
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🥦</span><span class="shop-cat">Warzywa</span></div>
+      <ul class="shop-list">
+        <li>Papryka czerwona <span class="shop-qty">2 szt.</span></li>
+        <li>Cukinia <span class="shop-qty">1 szt.</span></li>
+        <li>Brokuły <span class="shop-qty">1 szt.</span></li>
+        <li>Pomidory świeże <span class="shop-qty">4–5 szt.</span></li>
+        <li>Ogórek świeży <span class="shop-qty">2 szt.</span></li>
+        <li>Ogórki kiszone <span class="shop-qty">1 słoik</span></li>
+        <li>Rzodkiewki <span class="shop-qty">2 pęczki</span></li>
+        <li>Szpinak (świeży/mrożony) <span class="shop-qty">200g</span></li>
+        <li>Sałata lodowa <span class="shop-qty">1 główka</span></li>
+        <li>Marchew <span class="shop-qty">1 kg</span></li>
+        <li>Kapusta biała <span class="shop-qty">ok. 300g</span></li>
+        <li>Cebula <span class="shop-qty">4 szt.</span></li>
+        <li>Czosnek <span class="shop-qty">1 główka</span></li>
+        <li>Ziemniaki <span class="shop-qty">1 kg</span></li>
+        <li>Szczypiorek / por <span class="shop-qty">2 pęczki</span></li>
+        <li>Kukurydza z puszki <span class="shop-qty">1 puszka</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🍌</span><span class="shop-cat">Owoce</span></div>
+      <ul class="shop-list">
+        <li>Banany <span class="shop-qty">1 kg (7 szt.)</span></li>
+        <li>Jabłka <span class="shop-qty">4 szt.</span></li>
+        <li>Cytryna <span class="shop-qty">2 szt.</span></li>
+        <li>Maliny mrożone <span class="shop-qty">500g</span></li>
+        <li>Truskawki mrożone <span class="shop-qty">500g</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🥩</span><span class="shop-cat">Mięso i Ryby</span></div>
+      <ul class="shop-list">
+        <li>Pierś z kurczaka <span class="shop-qty">1 kg</span></li>
+        <li>Filet / mięso z indyka <span class="shop-qty">500g</span></li>
+        <li>Mięso mielone z indyka <span class="shop-qty">400g</span></li>
+        <li>Wędlina drobiowa (pierś) <span class="shop-qty">200g</span></li>
+        <li>Tuńczyk w wodzie — puszka <span class="shop-qty">4 puszki</span></li>
+        <li>Łosoś (puszka lub mrożony) <span class="shop-qty">1–2 szt.</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🧀</span><span class="shop-cat">Nabiał i Jaja</span></div>
+      <ul class="shop-list">
+        <li>Skyr naturalny — duże opak. <span class="shop-qty">3 × 500g</span></li>
+        <li>Skyr waniliowy / truskawkowy <span class="shop-qty">2 × 400g</span></li>
+        <li>Twaróg półtłusty <span class="shop-qty">2 × 250g</span></li>
+        <li>Twaróg chudy <span class="shop-qty">1 × 250g</span></li>
+        <li>Jogurt naturalny 2% <span class="shop-qty">1 × 500g</span></li>
+        <li>Kefir 2% <span class="shop-qty">1 × 1l</span></li>
+        <li>Mleko 2% <span class="shop-qty">2 l</span></li>
+        <li>Ser żółty (Gouda/Edam) <span class="shop-qty">200g</span></li>
+        <li>Śmietana 12% <span class="shop-qty">1 × 200ml</span></li>
+        <li>Masło <span class="shop-qty">1 kostka</span></li>
+        <li>Jaja (kl. M lub L) <span class="shop-qty">10 szt.</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🌾</span><span class="shop-cat">Produkty sypkie i kasze</span></div>
+      <ul class="shop-list">
+        <li>Płatki owsiane górskie <span class="shop-qty">1 kg</span></li>
+        <li>Granola bez cukru <span class="shop-qty">1 × 400g</span></li>
+        <li>Kasza gryczana <span class="shop-qty">500g</span></li>
+        <li>Kasza jaglana <span class="shop-qty">500g</span></li>
+        <li>Mąka owsiana <span class="shop-qty">500g</span></li>
+        <li>Makaron penne pełnoziarnisty <span class="shop-qty">500g</span></li>
+        <li>Makaron spaghetti pełnoziarnisty <span class="shop-qty">500g</span></li>
+        <li>Makaron świderki <span class="shop-qty">500g</span></li>
+        <li>Chleb razowy / pełnoziarnisty <span class="shop-qty">1–2 bochenki</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🫙</span><span class="shop-cat">Puszki i Sosy</span></div>
+      <ul class="shop-list">
+        <li>Passata pomidorowa <span class="shop-qty">3 × 500ml</span></li>
+        <li>Pomidory z puszki (całe/krojone) <span class="shop-qty">3 puszki</span></li>
+        <li>Mleczko kokosowe light <span class="shop-qty">1 puszka</span></li>
+        <li>Oliwa z oliwek <span class="shop-qty">1 butelka 500ml</span></li>
+        <li>Musztarda <span class="shop-qty">1 szt.</span></li>
+        <li>Miód <span class="shop-qty">1 słoiczek</span></li>
+        <li>Masło orzechowe (100% orzechów) <span class="shop-qty">1 słoiczek</span></li>
+      </ul>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-head"><span>🧂</span><span class="shop-cat">Przyprawy i Inne</span></div>
+      <ul class="shop-list">
+        <li>Kakao gorzkie <span class="shop-qty">1 opak.</span></li>
+        <li>Cynamon mielony <span class="shop-qty">1 opak.</span></li>
+        <li>Curry <span class="shop-qty">1 opak.</span></li>
+        <li>Papryka słodka mielona <span class="shop-qty">1 opak.</span></li>
+        <li>Oregano suszone <span class="shop-qty">1 opak.</span></li>
+        <li>Bazylia suszona <span class="shop-qty">1 opak.</span></li>
+        <li>Tymianek / majeranek <span class="shop-qty">1 opak.</span></li>
+        <li>Koperek suszony <span class="shop-qty">1 opak.</span></li>
+        <li>Sól, pieprz <span class="shop-qty">do uzup.</span></li>
+        <li>Bułka tarta <span class="shop-qty">1 opak.</span></li>
+        <li>Sok z cytryny (butelka) <span class="shop-qty">1 szt.</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div style="background: var(--surface); border: 1px solid var(--border); border-radius:12px; padding: 18px 22px; margin-bottom: 40px;">
+    <div style="font-family: 'Space Grotesk', sans-serif; font-weight:700; font-size:15px; margin-bottom:10px; color:var(--ink);">💡 Wskazówki zakupowe</div>
+    <ul style="list-style:none; display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:8px;">
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Skyr: Lidl (Milbona) ok. 3,49 zł/200g · Biedronka (własna marka) ok. 3,99 zł/200g</li>
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Kasza gryczana i jaglana: najtańsza w workach 1kg — ok. 5–7 zł/kg</li>
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Mrożone owoce = taniej i tak samo zdrowe jak świeże; idealne do shake'ów</li>
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Tuńczyk w wodzie: tańszy w zestawach/kartonach (Lidl boks 5 puszek)</li>
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Pierś z kurczaka: kupuj w opakowaniach 1 kg — ok. 18–22 zł/kg</li>
+      <li style="font-size:12px; color:var(--ink2); display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent);">→</span> Makaron pełnoziarnisty: Biedronka własna marka ok. 3,50 zł/500g</li>
+    </ul>
+  </div>
+
+</div><!-- /wrap zakupy -->
+</div><!-- /page zakupy -->
+
+<div class="footer">Plan Treningowy &amp; Dieta 30 Dni · Uwaga: skonsultuj z lekarzem lub dietetykiem przed dużymi zmianami diety · Hiperlordoza — poradź się fizjoterapeuty</div>
+
+<script>
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleDay(row) {
+  row.classList.toggle('open');
+}
+
+function showWeek(num, btn) {
+  document.querySelectorAll('.diet-week').forEach(w => w.classList.remove('active'));
+  document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('week-' + num).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
