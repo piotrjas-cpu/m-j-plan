@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kreator Planu</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#000000">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+:root{--black:#000;--white:#fff;--g1:#111;--g2:#1c1c1c;--g3:#2a2a2a;--g4:#3d3d3d;--g5:#6b6b6b;--g6:#9a9a9a;--g7:#c8c8c8;--g8:#e8e8e8;--danger:#ff3b3b;--success:#34c759;--f:'Inter',sans-serif;--mono:'DM Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--black);color:var(--white);font-family:var(--f);font-size:15px;line-height:1.5;overflow-x:hidden;}
+/* PAGES */
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
+/* LANDING */
+#pg-landing{position:relative;overflow:hidden;}
+.land-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,#1a1a1a 0%,#000 60%);}
+.land-grid{position:absolute;inset:0;opacity:.05;background-image:linear-gradient(var(--g3) 1px,transparent 1px),linear-gradient(90deg,var(--g3) 1px,transparent 1px);background-size:40px 40px;}
+.land-inner{position:relative;z-index:2;display:flex;flex-direction:column;min-height:100vh;padding:56px 24px 40px;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--g5);margin-bottom:28px;}
+.headline{font-size:clamp(42px,12vw,76px);font-weight:900;line-height:.92;letter-spacing:-.03em;color:var(--white);margin-bottom:20px;}
+.headline em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--white);}
+.land-sub{font-size:14px;color:var(--g6);max-width:280px;line-height:1.6;margin-bottom:44px;}
+.land-cta{display:flex;flex-direction:column;gap:10px;margin-bottom:44px;}
+.btn-p{display:flex;align-items:center;justify-content:space-between;padding:17px 20px;background:var(--white);color:var(--black);border:none;border-radius:14px;font-family:var(--f);font-size:15px;font-weight:700;cursor:pointer;transition:transform .15s;}
+.btn-p:active{transform:scale(.98);}
+.btn-s{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:transparent;color:var(--white);border:1px solid var(--g3);border-radius:14px;font-family:var(--f);font-size:14px;font-weight:600;cursor:pointer;transition:border-color .15s;}
+.btn-s:hover{border-color:var(--g5);}
+.land-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--g3);border:1px solid var(--g3);border-radius:14px;overflow:hidden;margin-top:auto;}
+.stat-c{background:var(--g1);padding:14px 10px;text-align:center;}
+.stat-n{font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.02em;line-height:1;margin-bottom:3px;}
+.stat-l{font-size:10px;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;}
+/* PEOPLE LIST (landing) */
+.people-section{padding:24px;}
+.people-title{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--g5);margin-bottom:12px;}
+.person-chip{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--g1);border:1px solid var(--g2);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.person-chip:hover{border-color:var(--g4);}
+.person-chip-av{width:36px;height:36px;border-radius:10px;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.person-chip-name{font-size:14px;font-weight:600;color:var(--white);flex:1;}
+.person-chip-bmi{font-family:var(--mono);font-size:11px;color:var(--g5);}
+.person-chip-del{background:none;border:none;color:var(--g4);font-size:16px;cursor:pointer;padding:4px;line-height:1;}
+.person-chip-del:hover{color:var(--danger);}
+.add-person-btn{width:100%;padding:14px;background:transparent;border:1px dashed var(--g3);border-radius:12px;color:var(--g5);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--f);margin-top:4px;transition:border-color .15s;}
+.add-person-btn:hover{border-color:var(--g5);color:var(--white);}
+.view-plan-btn{margin:0 24px 32px;padding:16px;background:var(--white);color:var(--black);border:none;border-radius:14px;font-family:var(--f);font-size:15px;font-weight:700;cursor:pointer;display:none;}
+/* WIZARD */
+#pg-wizard{flex-direction:column;}
+.wiz-top{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--g2);position:sticky;top:0;z-index:10;background:var(--black);}
+.wiz-back{width:34px;height:34px;border-radius:9px;background:var(--g2);border:none;color:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.wiz-prog-wrap{flex:1;}
+.wiz-step-lbl{font-family:var(--mono);font-size:10px;color:var(--g5);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;}
+.prog-bar{height:2px;background:var(--g2);border-radius:1px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--white);border-radius:1px;transition:width .4s cubic-bezier(.4,0,.2,1);}
+.wiz-body{flex:1;padding:28px 22px 110px;}
+.step{display:none;}.step.active{display:block;}
+.step-q{font-size:clamp(22px,6vw,32px);font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--white);margin-bottom:6px;}
+.step-hint{font-size:13px;color:var(--g5);margin-bottom:28px;line-height:1.5;}
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--g1);border:1px solid var(--g3);border-radius:13px;cursor:pointer;text-align:left;transition:all .15s;width:100%;font-family:var(--f);}
+.opt:hover{border-color:var(--g5);}
+.opt.sel{background:var(--white);border-color:var(--white);}
+.opt.sel .opt-lbl{color:var(--black);}
+.opt.sel .opt-sub{color:var(--g4);}
+.opt.sel .opt-ico{background:var(--black);}
+.opt-ico{width:40px;height:40px;border-radius:10px;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:background .15s;}
+.opt-lbl{font-size:14px;font-weight:600;color:var(--white);}
+.opt-sub{font-size:11px;color:var(--g5);margin-top:1px;}
+.opt-chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--g4);flex-shrink:0;transition:all .15s;position:relative;}
+.opt.sel .opt-chk{background:var(--black);border-color:var(--black);}
+.opt.sel .opt-chk::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:var(--white);font-weight:700;}
+/* MULTI SELECT (chips) */
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:9px 16px;background:var(--g1);border:1px solid var(--g3);border-radius:24px;font-size:13px;font-weight:500;color:var(--white);cursor:pointer;font-family:var(--f);transition:all .15s;}
+.chip:hover{border-color:var(--g5);}
+.chip.sel{background:var(--white);color:var(--black);border-color:var(--white);}
+/* FORM FIELDS */
+.bmi-form{display:flex;flex-direction:column;gap:12px;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);}
+.field input,.field select,.field textarea{padding:13px 15px;background:var(--g1);border:1px solid var(--g3);border-radius:11px;color:var(--white);font-size:15px;font-family:var(--f);outline:none;transition:border-color .15s;-webkit-appearance:none;resize:none;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--white);}
+.field input::placeholder,.field textarea::placeholder{color:var(--g4);}
+.bmi-live{background:var(--g1);border:1px solid var(--g3);border-radius:13px;padding:14px 16px;display:none;gap:14px;align-items:center;margin-top:4px;}
+.bmi-live.show{display:flex;}
+.bmi-circ{width:52px;height:52px;border-radius:50%;border:2px solid var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.bmi-n{font-size:15px;font-weight:800;color:var(--white);line-height:1;}
+.bmi-t{font-size:8px;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;}
+/* DAYS PICKER */
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.day-btn{padding:10px 4px;background:var(--g1);border:1px solid var(--g3);border-radius:9px;color:var(--white);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--f);text-align:center;transition:all .15s;}
+.day-btn:hover{border-color:var(--g5);}
+.day-btn.sel{background:var(--white);color:var(--black);border-color:var(--white);}
+/* STEPPER */
+.stepper{display:flex;align-items:center;gap:0;background:var(--g1);border:1px solid var(--g3);border-radius:11px;overflow:hidden;width:fit-content;}
+.stepper button{width:44px;height:44px;background:none;border:none;color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.stepper button:hover{background:var(--g2);}
+.stepper-val{width:40px;text-align:center;font-size:16px;font-weight:700;color:var(--white);}
+.stepper-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--g1);border:1px solid var(--g3);border-radius:12px;margin-bottom:8px;}
+.stepper-lbl{font-size:14px;font-weight:600;color:var(--white);}
+.stepper-sub{font-size:11px;color:var(--g5);margin-top:2px;}
+/* WIZA BOTTOM */
+.wiz-bot{position:fixed;bottom:0;left:0;right:0;padding:14px 22px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--black) 80%,transparent);z-index:50;}
+.wiz-next{width:100%;padding:17px;background:var(--white);color:var(--black);border:none;border-radius:13px;font-family:var(--f);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s,transform .1s;}
+.wiz-next:disabled{opacity:.2;cursor:not-allowed;}
+.wiz-next:not(:disabled):active{transform:scale(.98);}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ LANDING ══════════════════ -->
+<div id="pg-landing" class="page active">
+  <div class="land-bg"></div>
+  <div class="land-grid"></div>
+  <div class="land-inner">
+    <div class="eyebrow">Kreator Planu Personalnego</div>
+    <div class="headline">Zdrowie<br>na <em>Twoich</em><br>zasadach.</div>
+    <div class="land-sub">Kilka pytań — pełny plan treningowy i dieta dopasowana do Ciebie.</div>
+    <div class="land-cta">
+      <button class="btn-p" onclick="startWizard()">Stwórz swój plan <span>→</span></button>
+      <button class="btn-s" onclick="scrollToPeople()">👨‍👩‍👧 Dodaj rodzinę <span style="font-size:13px;color:var(--g5)">→</span></button>
+    </div>
+    <div class="land-stats">
+      <div class="stat-c"><div class="stat-n">6</div><div class="stat-l">Kroków</div></div>
+      <div class="stat-c"><div class="stat-n">30</div><div class="stat-l">Dni planu</div></div>
+      <div class="stat-c"><div class="stat-n">0 zł</div><div class="stat-l">Koszt</div></div>
+    </div>
+  </div>
+
+  <div class="people-section" id="people-section">
+    <div class="people-title">Dodane osoby</div>
+    <div id="people-list"><div style="font-size:13px;color:var(--g5);padding:8px 0;">Brak osób — zacznij od siebie!</div></div>
+    <button class="add-person-btn" onclick="startWizard()">+ Dodaj osobę</button>
+  </div>
+
+  <button class="view-plan-btn" id="view-plan-btn" onclick="goToPlan()">Zobacz plan →</button>
+</div>
+
+<!-- ══════════════════ WIZARD ══════════════════ -->
+<div id="pg-wizard" class="page">
+  <div class="wiz-top">
+    <button class="wiz-back" onclick="wizBack()">←</button>
+    <div class="wiz-prog-wrap">
+      <div class="wiz-step-lbl" id="step-lbl">Krok 1 z 6</div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:16%"></div></div>
+    </div>
+  </div>
+
+  <div class="wiz-body">
+
+    <!-- KROK 1: DANE + BMI -->
+    <div class="step active" id="s1">
+      <div class="step-q">Kim jesteś?</div>
+      <div class="step-hint">Podstawowe dane do wyliczenia BMI i kalorii.</div>
+      <div class="bmi-form">
+        <div class="field"><label>Imię</label><input id="w-name" type="text" placeholder="np. Piotr"></div>
+        <div class="fg">
+          <div class="field"><label>Wiek</label><input id="w-age" type="number" placeholder="28" min="10" max="100" inputmode="numeric" oninput="liveBMI()"></div>
+          <div class="field"><label>Płeć</label><select id="w-sex" onchange="liveBMI()"><option value="m">Mężczyzna</option><option value="f">Kobieta</option></select></div>
+        </div>
+        <div class="fg">
+          <div class="field"><label>Wzrost cm</label><input id="w-h" type="number" placeholder="180" min="100" max="220" inputmode="numeric" oninput="liveBMI()"></div>
+          <div class="field"><label>Waga kg</label><input id="w-w" type="number" placeholder="85" min="30" max="300" inputmode="numeric" oninput="liveBMI()"></div>
+        </div>
+        <div class="bmi-live" id="bmi-live">
+          <div class="bmi-circ"><div class="bmi-n" id="bmi-n">—</div><div class="bmi-t">BMI</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:var(--white)" id="bmi-cat">—</div><div style="font-size:11px;color:var(--g5);margin-top:2px" id="bmi-kcal">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KROK 2: CEL -->
+    <div class="step" id="s2">
+      <div class="step-q">Jaki masz cel?</div>
+      <div class="step-hint">Wybierz jeden — plan zostanie dopasowany.</div>
+      <div class="opts">
+        <button class="opt" onclick="pickOpt(this,'goal','reduce')"><div class="opt-ico">📉</div><div style="flex:1"><div class="opt-lbl">Redukcja</div><div class="opt-sub">Schudnąć, spalić tłuszcz</div></div><div class="opt-chk"></div></button>
+        <button class="opt" onclick="pickOpt(this,'goal','maintain')"><div class="opt-ico">⚖️</div><div style="flex:1"><div class="opt-lbl">Utrzymanie</div><div class="opt-sub">Zdrowo żyć, poprawić kondycję</div></div><div class="opt-chk"></div></button>
+        <button class="opt" onclick="pickOpt(this,'goal','gain')"><div class="opt-ico">💪</div><div style="flex:1"><div class="opt-lbl">Masa mięśniowa</div><div class="opt-sub">Przybrać na sile i mięśniach</div></div><div class="opt-chk"></div></button>
+      </div>
+    </div>
+
+    <!-- KROK 3: TRENING TAK/NIE -->
+    <div class="step" id="s3">
+      <div class="step-q">Chcesz ćwiczyć?</div>
+      <div class="step-hint">Plan treningowy jest opcjonalny.</div>
+      <div class="opts">
+        <button class="opt" onclick="pickOpt(this,'training','yes')"><div class="opt-ico">🏋️</div><div style="flex:1"><div class="opt-lbl">Tak, chcę trening</div><div class="opt-sub">Ustalimy harmonogram i ćwiczenia</div></div><div class="opt-chk"></div></button>
+        <button class="opt" onclick="pickOpt(this,'training','no')"><div class="opt-ico">🥗</div><div style="flex:1"><div class="opt-lbl">Nie, tylko dieta</div><div class="opt-sub">Sam jadłospis bez treningu</div></div><div class="opt-chk"></div></button>
+      </div>
+    </div>
+
+    <!-- KROK 4: HARMONOGRAM TRENINGU (tylko jeśli trening=yes) -->
+    <div class="step" id="s4">
+      <div class="step-q">Kiedy i jak ćwiczysz?</div>
+      <div class="step-hint">Wybierz dni i podziel między siłownię a dom.</div>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);margin-bottom:10px;">Wybierz dni treningowe</div>
+        <div class="days-grid" id="days-grid">
+          <button class="day-btn" onclick="toggleDay(this,'Pon')">Pon</button>
+          <button class="day-btn" onclick="toggleDay(this,'Wt')">Wt</button>
+          <button class="day-btn" onclick="toggleDay(this,'Śr')">Śr</button>
+          <button class="day-btn" onclick="toggleDay(this,'Czw')">Czw</button>
+          <button class="day-btn" onclick="toggleDay(this,'Pt')">Pt</button>
+          <button class="day-btn" onclick="toggleDay(this,'Sob')">Sob</button>
+          <button class="day-btn" onclick="toggleDay(this,'Nd')">Nd</button>
+        </div>
+        <div style="font-size:11px;color:var(--g5);margin-top:8px;" id="days-summary">Wybrano: 0 dni</div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);margin-bottom:10px;">Podział treningów</div>
+        <div class="stepper-row">
+          <div><div class="stepper-lbl">Siłownia</div><div class="stepper-sub">dni tygodniowo</div></div>
+          <div class="stepper" id="gym-stepper">
+            <button onclick="stepperChange('gym',-1)">−</button>
+            <div class="stepper-val" id="gym-val">0</div>
+            <button onclick="stepperChange('gym',+1)">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <div><div class="stepper-lbl">Dom / bieżnia</div><div class="stepper-sub">dni tygodniowo</div></div>
+          <div class="stepper" id="home-stepper">
+            <button onclick="stepperChange('home',-1)">−</button>
+            <div class="stepper-val" id="home-val">0</div>
+            <button onclick="stepperChange('home',+1)">+</button>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--g5);margin-top:4px;" id="split-note"></div>
+      </div>
+    </div>
+
+    <!-- KROK 5: SCHORZENIA -->
+    <div class="step" id="s5">
+      <div class="step-q">Jakieś schorzenia?</div>
+      <div class="step-hint" id="s5-hint">Zaznacz wszystkie — plan uwzględni ograniczenia.</div>
+      <div class="chips" id="cond-chips">
+        <button class="chip" onclick="toggleChip(this,'lordoza')">Hiperlordoza</button>
+        <button class="chip" onclick="toggleChip(this,'kolana')">Problemy z kolanami</button>
+        <button class="chip" onclick="toggleChip(this,'serce')">Choroby serca</button>
+        <button class="chip" onclick="toggleChip(this,'cukrzyca')">Cukrzyca</button>
+        <button class="chip" onclick="toggleChip(this,'kregoslup')">Ból kręgosłupa</button>
+        <button class="chip" onclick="toggleChip(this,'none')">Żadne</button>
+      </div>
+    </div>
+
+    <!-- KROK 6: PREFERENCJE ŻYWIENIOWE -->
+    <div class="step" id="s6">
+      <div class="step-q">Preferencje żywieniowe</div>
+      <div class="step-hint">Powiedz co wyeliminujemy z diety.</div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);margin-bottom:10px;">Czego nie lubisz?</div>
+        <div class="chips" id="dislike-chips">
+          <button class="chip" onclick="toggleChip(this,'ryz')">Ryż</button>
+          <button class="chip" onclick="toggleChip(this,'kasza')">Kasza</button>
+          <button class="chip" onclick="toggleChip(this,'tunczyk')">Tuńczyk</button>
+          <button class="chip" onclick="toggleChip(this,'jajecznica')">Jajecznica</button>
+          <button class="chip" onclick="toggleChip(this,'zupy')">Zupy</button>
+          <button class="chip" onclick="toggleChip(this,'ryby')">Ryby</button>
+          <button class="chip" onclick="toggleChip(this,'wieprzowina')">Wieprzowina</button>
+          <button class="chip" onclick="toggleChip(this,'warzywaStraczkowe')">Rośliny strączkowe</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);margin-bottom:10px;">Alergie</div>
+        <div class="chips" id="allergy-chips">
+          <button class="chip" onclick="toggleChip(this,'gluten')">Gluten</button>
+          <button class="chip" onclick="toggleChip(this,'laktoza')">Laktoza</button>
+          <button class="chip" onclick="toggleChip(this,'orzechyAlerg')">Orzechy</button>
+          <button class="chip" onclick="toggleChip(this,'jaja')">Jaja</button>
+          <button class="chip" onclick="toggleChip(this,'owoceMoreAlerg')">Owoce morza</button>
+          <button class="chip" onclick="toggleChip(this,'sojaAlerg')">Soja</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Inne — wpisz co chcesz wyeliminować</label>
+        <textarea id="w-other-food" rows="2" placeholder="np. nie lubię brokułów, jestem wegetarianinem..."></textarea>
+      </div>
+    </div>
+
+  </div><!-- /wiz-body -->
+
+  <div class="wiz-bot">
+    <button class="wiz-next" id="wiz-next" onclick="wizNext()" disabled>Dalej →</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let people = [];
+try { people = JSON.parse(localStorage.getItem('kreator-people') || '[]'); } catch(e){}
+
+let cur = 1;
+const TOTAL = 6;
+const ans = {name:'',age:0,sex:'m',height:0,weight:0,goal:'',training:'no',days:[],gymDays:0,homeDays:0,conditions:[],dislikes:[],allergies:[],otherFood:''};
+
+// ═══════════════════════════════════════
+// PAGES
+// ═══════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startWizard() {
+  // Reset
+  Object.assign(ans,{name:'',age:0,sex:'m',height:0,weight:0,goal:'',training:'no',days:[],gymDays:0,homeDays:0,conditions:[],dislikes:[],allergies:[],otherFood:''});
+  cur=1;
+  // Reset UI
+  ['w-name','w-age','w-h','w-w','w-other-food'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('w-sex').value='m';
+  document.getElementById('bmi-live').classList.remove('show');
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('gym-val').textContent='0'; ans.gymDays=0;
+  document.getElementById('home-val').textContent='0'; ans.homeDays=0;
+  document.getElementById('days-summary').textContent='Wybrano: 0 dni';
+  updateWizUI();
+  showPage('pg-wizard');
+}
+
+function scrollToPeople() {
+  document.getElementById('people-section').scrollIntoView({behavior:'smooth'});
+}
+
+function goToPlan() {
+  localStorage.setItem('kreator-people', JSON.stringify(people));
+  window.location.href = 'plan.html';
+}
+
+// ═══════════════════════════════════════
+// WIZARD LOGIC
+// ═══════════════════════════════════════
+function wizBack() {
+  if(cur===1){showPage('pg-landing');renderLanding();return;}
+  cur--;
+  if(cur===4 && ans.training==='no') cur--;
+  updateWizUI();
+}
+
+function wizNext() {
+  if(!stepValid()) return;
+  saveStep();
+  if(cur===3 && ans.training==='no') cur=5; // skip step 4
+  else if(cur===TOTAL) { savePerson(); return; }
+  else cur++;
+  updateWizUI();
+}
+
+function stepValid() {
+  if(cur===1){
+    const a=parseInt(document.getElementById('w-age').value);
+    const h=parseFloat(document.getElementById('w-h').value);
+    const w=parseFloat(document.getElementById('w-w').value);
+    return a>0&&h>0&&w>0;
+  }
+  if(cur===2) return !!ans.goal;
+  if(cur===3) return !!ans.training;
+  if(cur===4) return ans.days.length>0 && (ans.gymDays+ans.homeDays)>0;
+  return true; // steps 5,6 optional
+}
+
+function saveStep() {
+  if(cur===1){
+    ans.name=document.getElementById('w-name').value||'Osoba';
+    ans.age=parseInt(document.getElementById('w-age').value);
+    ans.sex=document.getElementById('w-sex').value;
+    ans.height=parseFloat(document.getElementById('w-h').value);
+    ans.weight=parseFloat(document.getElementById('w-w').value);
+  }
+  if(cur===6){
+    ans.otherFood=document.getElementById('w-other-food').value;
+  }
+}
+
+function savePerson() {
+  saveStep();
+  const bmi = ans.weight/((ans.height/100)**2);
+  const kcal = calcKcal(ans.weight,ans.height,ans.age,ans.sex,1.375,ans.goal);
+  people.push({...ans, id:Date.now(), bmi:parseFloat(bmi.toFixed(1)), kcal, protein:Math.round(ans.weight*1.8)});
+  localStorage.setItem('kreator-people', JSON.stringify(people));
+  showPage('pg-landing');
+  renderLanding();
+}
+
+function updateWizUI() {
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+cur).classList.add('active');
+  const dispStep = cur>4 && ans.training==='no' ? cur-1 : cur;
+  const dispTotal = ans.training==='no' ? TOTAL-1 : TOTAL;
+  document.getElementById('step-lbl').textContent=`Krok ${dispStep} z ${dispTotal}`;
+  document.getElementById('prog-fill').style.width=(cur/TOTAL*100)+'%';
+  const btn=document.getElementById('wiz-next');
+  btn.disabled=!stepValid();
+  const isLast=(cur===TOTAL)||(cur===5&&ans.training==='no'&&cur===5);
+  const realLast=cur===TOTAL;
+  btn.textContent=realLast?'Zapisz osobę ✓':'Dalej →';
+}
+
+function pickOpt(btn,key,val) {
+  btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  ans[key]=val;
+  document.getElementById('wiz-next').disabled=!stepValid();
+}
+
+function toggleChip(btn, val) {
+  btn.classList.toggle('sel');
+  const group = btn.closest('.chips').id;
+  let arr = group==='dislike-chips'?ans.dislikes:group==='allergy-chips'?ans.allergies:ans.conditions;
+  if(btn.classList.contains('sel')){
+    if(val==='none'){
+      // deselect all others in same group
+      btn.closest('.chips').querySelectorAll('.chip:not(:last-child)').forEach(b=>b.classList.remove('sel'));
+      arr.length=0;
+    } else {
+      btn.closest('.chips').querySelectorAll('[onclick*="none"]').forEach(b=>b.classList.remove('sel'));
+      const ni=arr.indexOf('none'); if(ni>-1)arr.splice(ni,1);
+    }
+    if(!arr.includes(val))arr.push(val);
+  } else {
+    const i=arr.indexOf(val); if(i>-1)arr.splice(i,1);
+  }
+}
+
+function toggleDay(btn, day) {
+  btn.classList.toggle('sel');
+  if(btn.classList.contains('sel')){if(!ans.days.includes(day))ans.days.push(day);}
+  else {ans.days=ans.days.filter(d=>d!==day);}
+  document.getElementById('days-summary').textContent=`Wybrano: ${ans.days.length} dni (${ans.days.join(', ')})`;
+  document.getElementById('wiz-next').disabled=!stepValid();
+}
+
+let gymV=0, homeV=0;
+function stepperChange(type, delta) {
+  const total=ans.days.length||7;
+  if(type==='gym'){
+    gymV=Math.max(0,Math.min(gymV+delta,total));
+    ans.gymDays=gymV;
+    document.getElementById('gym-val').textContent=gymV;
+  } else {
+    homeV=Math.max(0,Math.min(homeV+delta,total));
+    ans.homeDays=homeV;
+    document.getElementById('home-val').textContent=homeV;
+  }
+  const sum=gymV+homeV;
+  document.getElementById('split-note').textContent = sum>0 ? `${sum} dni treningowych, ${Math.max(0,7-sum)} dni odpoczynku` : '';
+  document.getElementById('wiz-next').disabled=!stepValid();
+}
+
+// ═══════════════════════════════════════
+// BMI LIVE
+// ═══════════════════════════════════════
+function liveBMI(){
+  const h=parseFloat(document.getElementById('w-h').value);
+  const w=parseFloat(document.getElementById('w-w').value);
+  const age=parseInt(document.getElementById('w-age').value)||30;
+  const sex=document.getElementById('w-sex').value;
+  if(!h||!w||h<100||w<30){document.getElementById('bmi-live').classList.remove('show');document.getElementById('wiz-next').disabled=true;return;}
+  const bmi=w/((h/100)**2);
+  const bmr=sex==='m'?88.36+(13.4*w)+(4.8*h)-(5.7*age):447.6+(9.2*w)+(3.1*h)-(4.3*age);
+  const tdee=bmr*1.375;
+  const cats=[{max:18.5,l:'Niedowaga'},{max:25,l:'Waga prawidłowa'},{max:30,l:'Nadwaga'},{max:999,l:'Otyłość'}];
+  const cat=cats.find(c=>bmi<c.max);
+  document.getElementById('bmi-n').textContent=bmi.toFixed(1);
+  document.getElementById('bmi-cat').textContent=cat?.l||'—';
+  document.getElementById('bmi-kcal').textContent=`TDEE ~${Math.round(tdee)} kcal/dzień`;
+  document.getElementById('bmi-live').classList.add('show');
+  document.getElementById('wiz-next').disabled=!stepValid();
+}
+
+function calcKcal(w,h,age,sex,act,goal){
+  const bmr=sex==='m'?88.36+(13.4*w)+(4.8*h)-(5.7*age):447.6+(9.2*w)+(3.1*h)-(4.3*age);
+  const tdee=bmr*parseFloat(act||1.375);
+  if(goal==='reduce')return Math.round(tdee-500);
+  if(goal==='gain')return Math.round(tdee+300);
+  return Math.round(tdee);
+}
+
+// ═══════════════════════════════════════
+// LANDING RENDER
+// ═══════════════════════════════════════
+const avs={m:'🧑',f:'👩'};
+function renderLanding(){
+  const list=document.getElementById('people-list');
+  if(!people.length){
+    list.innerHTML='<div style="font-size:13px;color:var(--g5);padding:8px 0;">Brak osób — zacznij od siebie!</div>';
+    document.getElementById('view-plan-btn').style.display='none';
+    return;
+  }
+  list.innerHTML=people.map(p=>`
+    <div class="person-chip" onclick="goToPlan()">
+      <div class="person-chip-av">${avs[p.sex]||'🧑'}</div>
+      <div class="person-chip-name">${p.name}</div>
+      <div class="person-chip-bmi">BMI ${p.bmi}</div>
+      <button class="person-chip-del" onclick="event.stopPropagation();delPerson(${p.id})">✕</button>
+    </div>`).join('');
+  document.getElementById('view-plan-btn').style.display='block';
+}
+
+function delPerson(id){
+  if(!confirm('Usunąć tę osobę?'))return;
+  people=people.filter(p=>p.id!==id);
+  localStorage.setItem('kreator-people',JSON.stringify(people));
+  renderLanding();
+}
+
+window.addEventListener('DOMContentLoaded',()=>{renderLanding();});
+</script>
+</body>
+</html>
