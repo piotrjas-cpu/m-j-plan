@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kreator Planu</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mój Plan">
+<meta name="theme-color" content="#000000">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+
+/* ═══════════════════════════════════
+   TOKENS — czarno-białe, ostre
+═══════════════════════════════════ */
+:root {
+  --black:   #000000;
+  --white:   #FFFFFF;
+  --gray-1:  #111111;
+  --gray-2:  #1C1C1C;
+  --gray-3:  #2A2A2A;
+  --gray-4:  #3D3D3D;
+  --gray-5:  #6B6B6B;
+  --gray-6:  #9A9A9A;
+  --gray-7:  #C8C8C8;
+  --gray-8:  #E8E8E8;
+  --accent:  #FFFFFF;
+  --danger:  #FF3B3B;
+  --success: #34C759;
+  --font-display: 'Inter', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════
+   PAGES
+═══════════════════════════════════ */
+.page { display:none; min-height:100vh; }
+.page.active { display:flex; flex-direction:column; }
+
+/* ═══════════════════════════════════
+   LANDING PAGE
+═══════════════════════════════════ */
+#page-landing {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.landing-bg {
+  position: absolute; inset:0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a1a1a 0%, #000 60%);
+}
+.landing-grid {
+  position: absolute; inset:0; opacity:0.06;
+  background-image:
+    linear-gradient(var(--gray-4) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gray-4) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.landing-content {
+  position: relative; z-index:2;
+  display: flex; flex-direction:column;
+  min-height: 100vh;
+  padding: 60px 28px 40px;
+}
+.landing-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-5);
+  margin-bottom: 32px;
+}
+.landing-headline {
+  font-size: clamp(44px, 12vw, 80px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+.landing-headline em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--white);
+}
+.landing-sub {
+  font-size: 15px;
+  color: var(--gray-6);
+  max-width: 300px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  font-weight: 400;
+}
+.landing-cta {
+  display: flex; flex-direction:column; gap:12px;
+  margin-bottom: 48px;
+}
+.btn-primary {
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 18px 22px;
+  background: var(--white);
+  color: var(--black);
+  border: none; border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary .arrow { font-size: 20px; }
+.btn-secondary {
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 17px 22px;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--gray-3); border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.btn-secondary:hover { border-color: var(--gray-5); }
+.landing-stats {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--gray-3);
+  border: 1px solid var(--gray-3);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: auto;
+}
+.stat-cell {
+  background: var(--gray-1);
+  padding: 16px 12px;
+  text-align: center;
+}
+.stat-num {
+  font-size: 22px; font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height:1;
+  margin-bottom: 4px;
+}
+.stat-lbl { font-size: 10px; color: var(--gray-5); text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ═══════════════════════════════════
+   KREATOR (wizard)
+═══════════════════════════════════ */
+#page-wizard {
+  flex-direction: column;
+}
+.wizard-topbar {
+  display: flex; align-items:center; gap:12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray-2);
+  position: sticky; top:0; z-index:10;
+  background: var(--black);
+}
+.wizard-back {
+  width:36px; height:36px; border-radius:10px;
+  background: var(--gray-2); border: none; color:var(--white);
+  font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.wizard-progress-wrap { flex:1; }
+.wizard-step-label {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--gray-5);
+  letter-spacing: 0.15em; text-transform:uppercase;
+  margin-bottom: 6px;
+}
+.progress-bar {
+  height: 2px; background: var(--gray-2); border-radius:1px; overflow:hidden;
+}
+.progress-fill {
+  height:100%; background: var(--white);
+  border-radius:1px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.wizard-body {
+  flex:1; padding:32px 24px 120px;
+}
+.step { display:none; }
+.step.active { display:block; }
+.step-q {
+  font-size: clamp(24px, 7vw, 36px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.step-hint {
+  font-size: 13px; color: var(--gray-5);
+  margin-bottom: 32px; line-height:1.5;
+}
+
+/* OPTIONS */
+.options-grid { display:flex; flex-direction:column; gap:10px; }
+.opt-btn {
+  display:flex; align-items:center; gap:16px;
+  padding:18px 20px;
+  background: var(--gray-1);
+  border: 1px solid var(--gray-3);
+  border-radius: 14px;
+  cursor: pointer; text-align:left;
+  transition: all 0.15s;
+  width:100%;
+  font-family: var(--font-display);
+}
+.opt-btn:hover { border-color: var(--gray-5); }
+.opt-btn.selected { background: var(--white); border-color:var(--white); }
+.opt-btn.selected .opt-label { color: var(--black); }
+.opt-btn.selected .opt-sub { color: var(--gray-4); }
+.opt-btn.selected .opt-icon-wrap { background: var(--black); }
+.opt-icon-wrap {
+  width:42px; height:42px; border-radius:10px;
+  background: var(--gray-2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0;
+  transition: background 0.15s;
+}
+.opt-info { flex:1; }
+.opt-label { font-size:15px; font-weight:600; color:var(--white); }
+.opt-sub { font-size:12px; color:var(--gray-5); margin-top:2px; }
+.opt-check { width:20px; height:20px; border-radius:50%; border:1.5px solid var(--gray-4); flex-shrink:0; transition:all 0.15s; }
+.opt-btn.selected .opt-check { background:var(--black); border-color:var(--black); position:relative; }
+.opt-btn.selected .opt-check::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:11px; color:var(--white); font-weight:700; }
+
+/* BMI FORM */
+.bmi-form { display:flex; flex-direction:column; gap:14px; }
+.field-group { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field label {
+  font-size:11px; font-weight:600; text-transform:uppercase;
+  letter-spacing:0.12em; color:var(--gray-5);
+}
+.field input, .field select {
+  padding:14px 16px;
+  background: var(--gray-1);
+  border: 1px solid var(--gray-3);
+  border-radius:12px;
+  color: var(--white);
+  font-size:16px;
+  font-family: var(--font-display);
+  outline:none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.field input:focus, .field select:focus { border-color: var(--white); }
+.field input::placeholder { color: var(--gray-4); }
+.bmi-live {
+  background: var(--gray-1);
+  border: 1px solid var(--gray-3);
+  border-radius:14px;
+  padding:16px 18px;
+  display:none;
+  gap:16px;
+  align-items:center;
+}
+.bmi-live.show { display:flex; }
+.bmi-circle {
+  width:56px; height:56px; border-radius:50%;
+  border: 2px solid var(--white);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.bmi-num { font-size:16px; font-weight:800; color:var(--white); line-height:1; }
+.bmi-tag { font-size:8px; color:var(--gray-5); text-transform:uppercase; letter-spacing:0.1em; }
+.bmi-info-label { font-size:13px; font-weight:600; color:var(--white); }
+.bmi-info-kcal { font-size:12px; color:var(--gray-5); margin-top:3px; }
+
+/* CONDITIONS */
+.conditions-grid { display:flex; flex-direction:column; gap:8px; }
+.cond-btn {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 16px;
+  background: var(--gray-1);
+  border: 1px solid var(--gray-3);
+  border-radius:12px;
+  cursor:pointer; text-align:left;
+  transition:all 0.15s; width:100%;
+  font-family: var(--font-display);
+}
+.cond-btn.selected { border-color: var(--white); }
+.cond-btn.selected .cond-box { background:var(--white); }
+.cond-btn.selected .cond-box::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:10px; color:var(--black); font-weight:700; }
+.cond-box { width:18px; height:18px; border-radius:4px; border:1.5px solid var(--gray-4); flex-shrink:0; position:relative; transition:all 0.15s; }
+.cond-label { font-size:14px; font-weight:500; color:var(--white); }
+.cond-none { font-size:12px; color:var(--gray-5); margin-top:4px; text-align:center; }
+
+/* WIZARD BOTTOM NAV */
+.wizard-bottom {
+  position:fixed; bottom:0; left:0; right:0;
+  padding:16px 24px calc(16px + env(safe-area-inset-bottom,0px));
+  background: linear-gradient(to top, var(--black) 80%, transparent);
+  z-index:50;
+}
+.wizard-next-btn {
+  width:100%; padding:18px;
+  background: var(--white); color: var(--black);
+  border:none; border-radius:14px;
+  font-family: var(--font-display);
+  font-size:16px; font-weight:700;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.wizard-next-btn:disabled { opacity:0.2; cursor:not-allowed; }
+.wizard-next-btn:not(:disabled):active { transform:scale(0.98); }
+
+/* ═══════════════════════════════════
+   WYNIK PAGE
+═══════════════════════════════════ */
+#page-result {
+  flex-direction:column;
+}
+.result-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--gray-2);
+  position:sticky; top:0; z-index:10;
+  background:var(--black);
+}
+.result-topbar-title {
+  font-family: var(--font-mono);
+  font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-5);
+}
+.result-topbar-btn {
+  background:var(--gray-2); border:none; border-radius:8px;
+  padding:8px 14px; color:var(--white); font-size:13px; font-weight:600;
+  cursor:pointer; font-family: var(--font-display);
+}
+.result-hero {
+  padding:32px 24px 24px;
+  border-bottom:1px solid var(--gray-2);
+}
+.result-name-row {
+  display:flex; align-items:center; gap:12px; margin-bottom:20px;
+}
+.result-avatar {
+  width:48px; height:48px; border-radius:14px;
+  background:var(--gray-2); border:1px solid var(--gray-3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; flex-shrink:0;
+}
+.result-name { font-size:20px; font-weight:800; letter-spacing:-0.02em; }
+.result-goal-tag {
+  display:inline-block;
+  background:var(--gray-2); border:1px solid var(--gray-3);
+  border-radius:6px; padding:3px 10px;
+  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--gray-6);
+}
+.result-bmi-row {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px;
+}
+.result-stat {
+  background:var(--gray-1); border:1px solid var(--gray-2);
+  border-radius:12px; padding:12px 10px; text-align:center;
+}
+.result-stat-val {
+  font-size:20px; font-weight:800; color:var(--white);
+  letter-spacing:-0.02em; line-height:1; margin-bottom:3px;
+}
+.result-stat-lbl { font-size:9px; text-transform:uppercase; letter-spacing:0.1em; color:var(--gray-5); }
+
+/* SECTIONS */
+.result-section { padding:24px; border-bottom:1px solid var(--gray-2); }
+.result-section-head {
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.result-section-icon {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--gray-2); display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0;
+}
+.result-section-title { font-size:16px; font-weight:700; color:var(--white); }
+.result-section-sub { font-size:12px; color:var(--gray-5); }
+
+/* TRAINING DAYS */
+.training-days { display:flex; flex-direction:column; gap:8px; }
+.day-row {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:14px 16px;
+  background:var(--gray-1); border:1px solid var(--gray-2); border-radius:12px;
+}
+.day-label {
+  font-family:var(--font-mono); font-size:11px; font-weight:500;
+  color:var(--gray-5); text-transform:uppercase; letter-spacing:0.1em;
+  width:28px; flex-shrink:0; padding-top:2px;
+}
+.day-content { flex:1; }
+.day-type {
+  font-size:13px; font-weight:700; color:var(--white); margin-bottom:2px;
+}
+.day-type-tag {
+  display:inline-block;
+  font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;
+  padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;
+}
+.day-type-tag.gym { background:rgba(255,255,255,0.1); color:var(--white); }
+.day-type-tag.home { background:rgba(255,255,255,0.05); color:var(--gray-6); }
+.day-type-tag.rest { color:var(--gray-5); }
+.day-exercises { font-size:12px; color:var(--gray-5); line-height:1.5; }
+
+/* DIET CARDS */
+.diet-days { display:flex; flex-direction:column; gap:10px; }
+.diet-day-card {
+  background:var(--gray-1); border:1px solid var(--gray-2); border-radius:12px;
+  overflow:hidden;
+}
+.diet-day-head {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px; border-bottom:1px solid var(--gray-2);
+  cursor:pointer; user-select:none;
+}
+.diet-day-label { font-family:var(--font-mono); font-size:11px; color:var(--gray-5); text-transform:uppercase; letter-spacing:0.1em; }
+.diet-day-name { font-size:13px; font-weight:600; color:var(--white); flex:1; }
+.diet-day-kcal { font-size:12px; color:var(--gray-6); font-weight:500; }
+.diet-day-toggle { color:var(--gray-5); font-size:12px; transition:transform 0.2s; }
+.diet-day-card.open .diet-day-toggle { transform:rotate(180deg); }
+.diet-day-body { display:none; }
+.diet-day-card.open .diet-day-body { display:block; }
+.meal-row {
+  padding:12px 16px; border-bottom:1px solid var(--gray-2);
+  display:flex; gap:10px; align-items:flex-start;
+}
+.meal-row:last-child { border-bottom:none; }
+.meal-type-dot { width:6px; height:6px; border-radius:50%; background:var(--gray-4); flex-shrink:0; margin-top:6px; }
+.meal-info { flex:1; }
+.meal-type-lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--gray-5); font-weight:600; }
+.meal-name { font-size:13px; font-weight:600; color:var(--white); margin-top:2px; }
+.meal-items { font-size:11px; color:var(--gray-5); margin-top:4px; line-height:1.5; }
+.meal-kcal { font-size:12px; color:var(--gray-6); font-weight:600; flex-shrink:0; padding-top:14px; }
+
+/* FAMILY BTN */
+.family-cta {
+  margin:24px; padding:20px;
+  background:var(--gray-1); border:1px solid var(--gray-3);
+  border-radius:16px; text-align:center; cursor:pointer;
+  transition:border-color 0.15s;
+}
+.family-cta:hover { border-color:var(--white); }
+.family-cta-icon { font-size:32px; margin-bottom:8px; }
+.family-cta-title { font-size:16px; font-weight:700; color:var(--white); margin-bottom:4px; }
+.family-cta-sub { font-size:12px; color:var(--gray-5); }
+
+/* ═══════════════════════════════════
+   RODZINA PAGE
+═══════════════════════════════════ */
+#page-family {
+  flex-direction:column;
+}
+.family-topbar {
+  display:flex; align-items:center; gap:12px;
+  padding:16px 20px; border-bottom:1px solid var(--gray-2);
+  position:sticky; top:0; z-index:10; background:var(--black);
+}
+.family-topbar-title { font-size:16px; font-weight:700; color:var(--white); flex:1; }
+.family-add-btn {
+  background:var(--white); color:var(--black);
+  border:none; border-radius:10px;
+  padding:9px 16px; font-size:13px; font-weight:700;
+  cursor:pointer; font-family:var(--font-display);
+}
+.family-body { flex:1; padding:20px; }
+.member-card {
+  background:var(--gray-1); border:1px solid var(--gray-2);
+  border-radius:16px; margin-bottom:12px; overflow:hidden;
+}
+.member-head {
+  display:flex; align-items:center; gap:12px;
+  padding:16px; border-bottom:1px solid var(--gray-2);
+}
+.member-avatar {
+  width:44px; height:44px; border-radius:12px;
+  background:var(--gray-2); display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0;
+}
+.member-name { font-size:15px; font-weight:700; color:var(--white); }
+.member-role { font-size:11px; color:var(--gray-5); margin-top:2px; }
+.member-bmi-badge {
+  margin-left:auto;
+  font-family:var(--font-mono); font-size:13px; font-weight:500;
+  color:var(--gray-6);
+}
+.member-stats {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--gray-2);
+}
+.member-stat {
+  background:var(--gray-1); padding:12px 10px; text-align:center;
+}
+.member-stat-val { font-size:18px; font-weight:800; color:var(--white); line-height:1; margin-bottom:2px; }
+.member-stat-lbl { font-size:9px; text-transform:uppercase; letter-spacing:0.1em; color:var(--gray-5); }
+.member-actions {
+  display:flex; gap:8px; padding:12px 16px;
+}
+.member-action-btn {
+  flex:1; padding:10px;
+  background:var(--gray-2); border:1px solid var(--gray-3);
+  border-radius:10px; color:var(--white);
+  font-size:12px; font-weight:600; cursor:pointer;
+  font-family:var(--font-display); text-align:center;
+  transition:border-color 0.15s;
+}
+.member-action-btn:hover { border-color:var(--white); }
+.member-action-btn.danger { color:var(--danger); }
+.member-action-btn.danger:hover { border-color:var(--danger); }
+.family-empty {
+  text-align:center; padding:48px 20px;
+  border:1px dashed var(--gray-3); border-radius:16px;
+}
+.family-empty-icon { font-size:44px; margin-bottom:12px; }
+.family-empty-title { font-size:18px; font-weight:700; color:var(--white); margin-bottom:6px; }
+.family-empty-sub { font-size:13px; color:var(--gray-5); }
+
+/* ADD MEMBER MODAL */
+.modal-backdrop {
+  position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  display:none; align-items:flex-end;
+}
+.modal-backdrop.show { display:flex; }
+.modal-sheet {
+  width:100%; background:var(--gray-1);
+  border-radius:24px 24px 0 0; border-top:1px solid var(--gray-3);
+  padding:24px 24px calc(32px + env(safe-area-inset-bottom,0px));
+  max-height:90vh; overflow-y:auto;
+  animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width:36px; height:4px; background:var(--gray-3); border-radius:2px; margin:0 auto 20px; }
+.modal-title { font-size:20px; font-weight:800; letter-spacing:-0.02em; margin-bottom:20px; }
+.modal-fields { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+.modal-submit {
+  width:100%; padding:17px;
+  background:var(--white); color:var(--black);
+  border:none; border-radius:14px;
+  font-size:16px; font-weight:700; cursor:pointer;
+  font-family:var(--font-display);
+  transition:opacity 0.15s;
+}
+.modal-cancel {
+  width:100%; padding:14px; margin-top:8px;
+  background:transparent; color:var(--gray-5);
+  border:1px solid var(--gray-3); border-radius:14px;
+  font-size:14px; font-weight:600; cursor:pointer;
+  font-family:var(--font-display);
+}
+
+/* TOTAL ROW */
+.family-total {
+  background:var(--gray-2); border:1px solid var(--gray-3);
+  border-radius:14px; padding:16px; margin-top:4px;
+  display:none;
+}
+.family-total.show { display:block; }
+.family-total-title { font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--gray-5); font-weight:600; margin-bottom:10px; }
+.family-total-row { display:flex; justify-content:space-between; margin-bottom:6px; }
+.family-total-lbl { font-size:13px; color:var(--gray-6); }
+.family-total-val { font-size:13px; font-weight:700; color:var(--white); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: LANDING                                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+  <div class="landing-bg"></div>
+  <div class="landing-grid"></div>
+  <div class="landing-content">
+    <div class="landing-eyebrow">Twój Plan Personalny</div>
+    <div class="landing-headline">
+      Zdrowie<br>na <em>Twoich</em><br>zasadach.
+    </div>
+    <div class="landing-sub">
+      Kreator w 5 krokach dopasuje plan treningowy i dietę do Twojego ciała i trybu życia.
+    </div>
+    <div class="landing-cta">
+      <button class="btn-primary" onclick="startWizard()">
+        Stwórz swój plan
+        <span class="arrow">→</span>
+      </button>
+      <button class="btn-secondary" onclick="showPage('family')">
+        <span>👨‍👩‍👧 Plan dla rodziny</span>
+        <span style="font-size:14px;color:var(--gray-5);">→</span>
+      </button>
+    </div>
+    <div class="landing-stats">
+      <div class="stat-cell"><div class="stat-num">5</div><div class="stat-lbl">Kroków</div></div>
+      <div class="stat-cell"><div class="stat-num">30</div><div class="stat-lbl">Dni planu</div></div>
+      <div class="stat-cell"><div class="stat-num">0 zł</div><div class="stat-lbl">Koszt</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: WIZARD                                   -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="page-wizard" class="page">
+  <div class="wizard-topbar">
+    <button class="wizard-back" onclick="wizardBack()">←</button>
+    <div class="wizard-progress-wrap">
+      <div class="wizard-step-label" id="step-label">Krok 1 z 5</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
+    </div>
+  </div>
+
+  <div class="wizard-body">
+
+    <!-- KROK 1: DANE OSOBOWE + BMI -->
+    <div class="step active" id="step-1">
+      <div class="step-q">Kim jesteś?</div>
+      <div class="step-hint">Podaj podstawowe dane — wyliczymy BMI i zapotrzebowanie kaloryczne.</div>
+      <div class="bmi-form">
+        <div class="field">
+          <label>Imię (opcjonalnie)</label>
+          <input type="text" id="w-name" placeholder="np. Piotr">
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Wiek</label>
+            <input type="number" id="w-age" placeholder="np. 28" min="10" max="100" inputmode="numeric" oninput="calcLiveBMI()">
+          </div>
+          <div class="field">
+            <label>Płeć</label>
+            <select id="w-sex" onchange="calcLiveBMI()">
+              <option value="m">Mężczyzna</option>
+              <option value="f">Kobieta</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Wzrost (cm)</label>
+            <input type="number" id="w-height" placeholder="np. 180" min="100" max="220" inputmode="numeric" oninput="calcLiveBMI()">
+          </div>
+          <div class="field">
+            <label>Waga (kg)</label>
+            <input type="number" id="w-weight" placeholder="np. 85" min="30" max="300" inputmode="numeric" oninput="calcLiveBMI()">
+          </div>
+        </div>
+        <div class="bmi-live" id="bmi-live">
+          <div class="bmi-circle">
+            <div class="bmi-num" id="bmi-num">—</div>
+            <div class="bmi-tag">BMI</div>
+          </div>
+          <div>
+            <div class="bmi-info-label" id="bmi-cat">—</div>
+            <div class="bmi-info-kcal" id="bmi-kcal">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KROK 2: CEL -->
+    <div class="step" id="step-2">
+      <div class="step-q">Jaki jest Twój cel?</div>
+      <div class="step-hint">Wybierz jeden — plan zostanie dopasowany.</div>
+      <div class="options-grid">
+        <button class="opt-btn" onclick="selectOpt(this,'goal','reduce')">
+          <div class="opt-icon-wrap">📉</div>
+          <div class="opt-info"><div class="opt-label">Redukcja</div><div class="opt-sub">Chcę schudnąć i spalić tkankę tłuszczową</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'goal','maintain')">
+          <div class="opt-icon-wrap">⚖️</div>
+          <div class="opt-info"><div class="opt-label">Utrzymanie</div><div class="opt-sub">Chcę utrzymać obecną wagę i poprawić kondycję</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'goal','gain')">
+          <div class="opt-icon-wrap">💪</div>
+          <div class="opt-info"><div class="opt-label">Masa mięśniowa</div><div class="opt-sub">Chcę przybrać na masie i sile</div></div>
+          <div class="opt-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- KROK 3: TRENING TAK/NIE -->
+    <div class="step" id="step-3">
+      <div class="step-q">Czy chcesz ćwiczyć?</div>
+      <div class="step-hint">Plan treningowy jest opcjonalny — możesz dostać samą dietę.</div>
+      <div class="options-grid">
+        <button class="opt-btn" onclick="selectOpt(this,'training','yes')">
+          <div class="opt-icon-wrap">🏋️</div>
+          <div class="opt-info"><div class="opt-label">Tak, chcę plan treningowy</div><div class="opt-sub">Siłownia, dom, cardio — dopasujemy</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'training','no')">
+          <div class="opt-icon-wrap">🥗</div>
+          <div class="opt-info"><div class="opt-label">Nie, tylko dieta</div><div class="opt-sub">Sam jadłospis bez planu ćwiczeń</div></div>
+          <div class="opt-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- KROK 4: SCHORZENIA (jeśli trening=yes) lub PREFERENCJE (jeśli nie) -->
+    <div class="step" id="step-4">
+      <div class="step-q" id="step4-q">Czy masz jakieś schorzenia?</div>
+      <div class="step-hint" id="step4-hint">Zaznacz wszystkie które dotyczą — ćwiczenia zostaną dobezpieczenia.</div>
+      <div class="conditions-grid" id="conditions-grid">
+        <button class="cond-btn" onclick="toggleCond(this,'lordoza')">
+          <div class="cond-box"></div>
+          <div class="cond-label">Hiperlordoza / problemy z kręgosłupem</div>
+        </button>
+        <button class="cond-btn" onclick="toggleCond(this,'kolana')">
+          <div class="cond-box"></div>
+          <div class="cond-label">Problemy z kolanami / stawami</div>
+        </button>
+        <button class="cond-btn" onclick="toggleCond(this,'serce')">
+          <div class="cond-box"></div>
+          <div class="cond-label">Choroby serca / nadciśnienie</div>
+        </button>
+        <button class="cond-btn" onclick="toggleCond(this,'cukrzyca')">
+          <div class="cond-box"></div>
+          <div class="cond-label">Cukrzyca / problemy z glukozą</div>
+        </button>
+        <button class="cond-btn" onclick="toggleCond(this,'none')">
+          <div class="cond-box"></div>
+          <div class="cond-label">Żadne z powyższych</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- KROK 5: AKTYWNOŚĆ -->
+    <div class="step" id="step-5">
+      <div class="step-q">Twój styl życia?</div>
+      <div class="step-hint">Pomoże wyliczyć dokładne zapotrzebowanie kaloryczne.</div>
+      <div class="options-grid">
+        <button class="opt-btn" onclick="selectOpt(this,'activity','1.2')">
+          <div class="opt-icon-wrap">🪑</div>
+          <div class="opt-info"><div class="opt-label">Siedzący</div><div class="opt-sub">Praca biurowa, mało ruchu</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'activity','1.375')">
+          <div class="opt-icon-wrap">🚶</div>
+          <div class="opt-info"><div class="opt-label">Mało aktywny</div><div class="opt-sub">Spacery, 1-2 treningi w tygodniu</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'activity','1.55')">
+          <div class="opt-icon-wrap">🏃</div>
+          <div class="opt-info"><div class="opt-label">Umiarkowanie aktywny</div><div class="opt-sub">3-4 treningi w tygodniu</div></div>
+          <div class="opt-check"></div>
+        </button>
+        <button class="opt-btn" onclick="selectOpt(this,'activity','1.725')">
+          <div class="opt-icon-wrap">⚡</div>
+          <div class="opt-info"><div class="opt-label">Bardzo aktywny</div><div class="opt-sub">5+ treningów, praca fizyczna</div></div>
+          <div class="opt-check"></div>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /wizard-body -->
+
+  <div class="wizard-bottom">
+    <button class="wizard-next-btn" id="wizard-next-btn" onclick="wizardNext()" disabled>
+      Dalej →
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: WYNIK                                    -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="page-result" class="page">
+  <div class="result-topbar">
+    <div class="result-topbar-title">Twój plan</div>
+    <button class="result-topbar-btn" onclick="showPage('family')">👨‍👩‍👧 Rodzina</button>
+  </div>
+
+  <div class="result-hero">
+    <div class="result-name-row">
+      <div class="result-avatar" id="r-avatar">🧑</div>
+      <div>
+        <div class="result-name" id="r-name">Plan personalny</div>
+        <div class="result-goal-tag" id="r-goal-tag">Redukcja</div>
+      </div>
+    </div>
+    <div class="result-bmi-row">
+      <div class="result-stat"><div class="result-stat-val" id="r-bmi">—</div><div class="result-stat-lbl">BMI</div></div>
+      <div class="result-stat"><div class="result-stat-val" id="r-kcal">—</div><div class="result-stat-lbl">kcal/dzień</div></div>
+      <div class="result-stat"><div class="result-stat-val" id="r-protein">—</div><div class="result-stat-lbl">Białko</div></div>
+      <div class="result-stat"><div class="result-stat-val" id="r-weight">—</div><div class="result-stat-lbl">Waga</div></div>
+    </div>
+  </div>
+
+  <!-- TRENING -->
+  <div class="result-section" id="r-training-section">
+    <div class="result-section-head">
+      <div class="result-section-icon">🏋️</div>
+      <div>
+        <div class="result-section-title">Plan treningowy</div>
+        <div class="result-section-sub">Tydzień — powtarzaj co tydzień</div>
+      </div>
+    </div>
+    <div class="training-days" id="r-training-days"></div>
+  </div>
+
+  <!-- DIETA -->
+  <div class="result-section">
+    <div class="result-section-head">
+      <div class="result-section-icon">🥗</div>
+      <div>
+        <div class="result-section-title">Przykładowy jadłospis</div>
+        <div class="result-section-sub" id="r-diet-sub">3 dni • wysokobiałkowy</div>
+      </div>
+    </div>
+    <div class="diet-days" id="r-diet-days"></div>
+  </div>
+
+  <!-- CTA RODZINA -->
+  <div class="family-cta" onclick="showPage('family')">
+    <div class="family-cta-icon">👨‍👩‍👧</div>
+    <div class="family-cta-title">Dodaj rodzinę</div>
+    <div class="family-cta-sub">Stwórz plan dla całego domu — każdy dostaje własne BMI i jadłospis</div>
+  </div>
+
+  <!-- RESTART -->
+  <div style="padding:0 24px 40px;text-align:center;">
+    <button onclick="restartWizard()" style="background:none;border:1px solid var(--gray-3);border-radius:12px;padding:12px 24px;color:var(--gray-5);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-display);">↺ Zacznij od nowa</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAGE: RODZINA                                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="page-family" class="page">
+  <div class="family-topbar">
+    <button class="wizard-back" onclick="showPage('landing')">←</button>
+    <div class="family-topbar-title">Rodzina</div>
+    <button class="family-add-btn" onclick="openAddModal()">+ Dodaj</button>
+  </div>
+  <div class="family-body">
+    <div id="family-members-list"></div>
+    <div class="family-total" id="family-total">
+      <div class="family-total-title">Łączne zapotrzebowanie rodziny</div>
+      <div class="family-total-row"><div class="family-total-lbl">Kalorie łącznie</div><div class="family-total-val" id="ft-kcal">— kcal</div></div>
+      <div class="family-total-row"><div class="family-total-lbl">Białko łącznie</div><div class="family-total-val" id="ft-protein">— g</div></div>
+      <div class="family-total-row"><div class="family-total-lbl">Liczba osób</div><div class="family-total-val" id="ft-count">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MEMBER MODAL -->
+<div class="modal-backdrop" id="add-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Dodaj osobę</div>
+    <div class="modal-fields">
+      <div class="field"><label>Imię</label><input type="text" id="m-name" placeholder="np. Mama"></div>
+      <div class="field-group">
+        <div class="field"><label>Wiek</label><input type="number" id="m-age" placeholder="np. 45" inputmode="numeric"></div>
+        <div class="field"><label>Płeć</label><select id="m-sex"><option value="m">Mężczyzna</option><option value="f">Kobieta</option></select></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Wzrost (cm)</label><input type="number" id="m-height" placeholder="175" inputmode="numeric"></div>
+        <div class="field"><label>Waga (kg)</label><input type="number" id="m-weight" placeholder="70" inputmode="numeric"></div>
+      </div>
+      <div class="field"><label>Cel</label>
+        <select id="m-goal">
+          <option value="reduce">Redukcja (-500 kcal)</option>
+          <option value="maintain">Utrzymanie wagi</option>
+          <option value="gain">Przyrost (+300 kcal)</option>
+        </select>
+      </div>
+      <div class="field"><label>Aktywność</label>
+        <select id="m-activity">
+          <option value="1.2">Siedzący (1.2)</option>
+          <option value="1.375" selected>Mało aktywny (1.375)</option>
+          <option value="1.55">Umiarkowany (1.55)</option>
+          <option value="1.725">Bardzo aktywny (1.725)</option>
+        </select>
+      </div>
+    </div>
+    <button class="modal-submit" onclick="addMember()">Dodaj do rodziny →</button>
+    <button class="modal-cancel" onclick="closeAddModal()">Anuluj</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let currentStep = 1;
+const totalSteps = 5;
+const answers = { goal:'', training:'', conditions:[], activity:'', name:'', age:0, sex:'m', height:0, weight:0 };
+let familyMembers = [];
+try { familyMembers = JSON.parse(localStorage.getItem('family-members') || '[]'); } catch(e) {}
+
+// ═══════════════════════════════════════════
+// PAGE NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name === 'family') renderFamily();
+}
+
+// ═══════════════════════════════════════════
+// WIZARD LOGIC
+// ═══════════════════════════════════════════
+function startWizard() {
+  currentStep = 1;
+  updateWizardUI();
+  showPage('wizard');
+}
+function restartWizard() {
+  answers.goal=''; answers.training=''; answers.conditions=[]; answers.activity='';
+  showPage('landing');
+}
+
+function wizardBack() {
+  if(currentStep === 1) { showPage('landing'); return; }
+  currentStep--;
+  // Skip step 4 if going back from step 5 when training=no
+  if(currentStep === 4 && answers.training === 'no') currentStep--;
+  updateWizardUI();
+}
+
+function wizardNext() {
+  // Validate current step
+  if(!stepValid()) return;
+  // Save step data
+  saveStepData();
+
+  if(currentStep === 3 && answers.training === 'no') {
+    // Skip conditions step
+    currentStep = 5;
+  } else if(currentStep === totalSteps) {
+    generateResult();
+    showPage('result');
+    return;
+  } else {
+    currentStep++;
+  }
+  updateWizardUI();
+}
+
+function updateWizardUI() {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + currentStep).classList.add('active');
+  const label = currentStep === 5 && answers.training === 'no' ? `Krok 4 z 4` : `Krok ${currentStep} z ${totalSteps}`;
+  document.getElementById('step-label').textContent = label;
+  const progress = (currentStep / totalSteps) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+  // Adjust step 4 text based on training choice
+  if(currentStep === 4) {
+    if(answers.training === 'yes') {
+      document.getElementById('step4-q').textContent = 'Czy masz jakieś schorzenia?';
+      document.getElementById('step4-hint').textContent = 'Zaznacz wszystkie które dotyczą — ćwiczenia zostaną dobezpieczenia.';
+      document.getElementById('conditions-grid').style.display = 'flex';
+    }
+  }
+  updateNextBtn();
+}
+
+function stepValid() {
+  if(currentStep === 1) {
+    const age = parseInt(document.getElementById('w-age').value);
+    const h = parseFloat(document.getElementById('w-height').value);
+    const w = parseFloat(document.getElementById('w-weight').value);
+    return age > 0 && h > 0 && w > 0;
+  }
+  if(currentStep === 2) return !!answers.goal;
+  if(currentStep === 3) return !!answers.training;
+  if(currentStep === 4) return true; // conditions optional
+  if(currentStep === 5) return !!answers.activity;
+  return true;
+}
+
+function updateNextBtn() {
+  const btn = document.getElementById('wizard-next-btn');
+  const valid = stepValid();
+  btn.disabled = !valid;
+  btn.textContent = currentStep === totalSteps || (currentStep === 5) ? 'Generuj plan →' : 'Dalej →';
+}
+
+function saveStepData() {
+  if(currentStep === 1) {
+    answers.name   = document.getElementById('w-name').value || 'Ty';
+    answers.age    = parseInt(document.getElementById('w-age').value);
+    answers.sex    = document.getElementById('w-sex').value;
+    answers.height = parseFloat(document.getElementById('w-height').value);
+    answers.weight = parseFloat(document.getElementById('w-weight').value);
+  }
+}
+
+function selectOpt(btn, key, val) {
+  btn.closest('.options-grid').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[key] = val;
+  updateNextBtn();
+}
+
+function toggleCond(btn, val) {
+  if(val === 'none') {
+    document.querySelectorAll('.cond-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers.conditions = ['none'];
+  } else {
+    const noneBtn = document.querySelector('.cond-btn[onclick*="none"]');
+    if(noneBtn) noneBtn.classList.remove('selected');
+    answers.conditions = answers.conditions.filter(c => c !== 'none');
+    btn.classList.toggle('selected');
+    if(btn.classList.contains('selected')) {
+      if(!answers.conditions.includes(val)) answers.conditions.push(val);
+    } else {
+      answers.conditions = answers.conditions.filter(c => c !== val);
+    }
+  }
+  updateNextBtn();
+}
+
+// ═══════════════════════════════════════════
+// BMI LIVE
+// ═══════════════════════════════════════════
+function calcLiveBMI() {
+  const h = parseFloat(document.getElementById('w-height').value);
+  const w = parseFloat(document.getElementById('w-weight').value);
+  const age = parseInt(document.getElementById('w-age').value) || 30;
+  const sex = document.getElementById('w-sex').value;
+  if(!h || !w || h < 100 || w < 30) { document.getElementById('bmi-live').classList.remove('show'); updateNextBtn(); return; }
+  const bmi = w / ((h/100)**2);
+  const bmr = sex==='m' ? 88.36+(13.4*w)+(4.8*h)-(5.7*age) : 447.6+(9.2*w)+(3.1*h)-(4.3*age);
+  const tdee = bmr * 1.375;
+  const cats = [{max:18.5,lbl:'Niedowaga'},{max:25,lbl:'Waga prawidłowa'},{max:30,lbl:'Nadwaga'},{max:999,lbl:'Otyłość'}];
+  const cat = cats.find(c => bmi < c.max);
+  document.getElementById('bmi-num').textContent = bmi.toFixed(1);
+  document.getElementById('bmi-cat').textContent = cat?.lbl || '—';
+  document.getElementById('bmi-kcal').textContent = `TDEE ~${Math.round(tdee)} kcal/dzień`;
+  document.getElementById('bmi-live').classList.add('show');
+  updateNextBtn();
+}
+
+// ═══════════════════════════════════════════
+// GENERATE RESULT
+// ═══════════════════════════════════════════
+function calcKcal(weight, height, age, sex, activity, goal) {
+  const bmr = sex==='m' ? 88.36+(13.4*weight)+(4.8*height)-(5.7*age) : 447.6+(9.2*weight)+(3.1*height)-(4.3*age);
+  const tdee = bmr * parseFloat(activity || 1.375);
+  if(goal==='reduce') return Math.round(tdee - 500);
+  if(goal==='gain')   return Math.round(tdee + 300);
+  return Math.round(tdee);
+}
+
+function generateResult() {
+  const { name, age, sex, height, weight, goal, training, conditions, activity } = answers;
+  const bmi = weight / ((height/100)**2);
+  const kcal = calcKcal(weight, height, age, sex, activity, goal);
+  const protein = Math.round(weight * (goal==='gain' ? 2.2 : 1.8));
+  const goalLabels = {reduce:'Redukcja tkanki tłuszczowej', maintain:'Utrzymanie wagi', gain:'Budowa masy mięśniowej'};
+  const avatars = {m:'🧑', f:'👩'};
+
+  // Header
+  document.getElementById('r-name').textContent = name || 'Plan personalny';
+  document.getElementById('r-avatar').textContent = avatars[sex] || '🧑';
+  document.getElementById('r-goal-tag').textContent = goalLabels[goal] || goal;
+  document.getElementById('r-bmi').textContent = bmi.toFixed(1);
+  document.getElementById('r-kcal').textContent = kcal;
+  document.getElementById('r-protein').textContent = protein+'g';
+  document.getElementById('r-weight').textContent = weight+'kg';
+
+  // Training
+  const hasLordoza = conditions.includes('lordoza');
+  const hasKolana  = conditions.includes('kolana');
+  if(training === 'yes') {
+    document.getElementById('r-training-section').style.display = 'block';
+    const days = buildTrainingPlan(hasLordoza, hasKolana, goal);
+    const container = document.getElementById('r-training-days');
+    container.innerHTML = days.map(d => `
+      <div class="day-row">
+        <div class="day-label">${d.day}</div>
+        <div class="day-content">
+          <div class="day-type">${d.type}<span class="day-type-tag ${d.tag}">${d.tagLabel}</span></div>
+          <div class="day-exercises">${d.exercises}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    document.getElementById('r-training-section').style.display = 'none';
+  }
+
+  // Diet
+  document.getElementById('r-diet-sub').textContent = `3 dni · ${kcal} kcal · ${protein}g białka`;
+  const diet = buildDiet(kcal, goal);
+  const dietContainer = document.getElementById('r-diet-days');
+  dietContainer.innerHTML = diet.map((day, i) => `
+    <div class="diet-day-card" id="dday-${i}">
+      <div class="diet-day-head" onclick="toggleDietDay(${i})">
+        <div class="diet-day-label">Dzień ${i+1}</div>
+        <div class="diet-day-name">${day.title}</div>
+        <div class="diet-day-kcal">~${day.kcal} kcal</div>
+        <div class="diet-day-toggle">▼</div>
+      </div>
+      <div class="diet-day-body">
+        ${day.meals.map(m => `
+          <div class="meal-row">
+            <div class="meal-type-dot"></div>
+            <div class="meal-info">
+              <div class="meal-type-lbl">${m.type}</div>
+              <div class="meal-name">${m.name}</div>
+              <div class="meal-items">${m.items}</div>
+            </div>
+            <div class="meal-kcal">${m.kcal} kcal</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleDietDay(i) {
+  document.getElementById('dday-' + i).classList.toggle('open');
+}
+
+function buildTrainingPlan(lordoza, kolana) {
+  const coreNote = lordoza ? 'Dead Bug, Plank, Side Plank (modyfikacje lordozy)' : 'Plank, Hollow Body, Ab Wheel';
+  const legNote  = kolana  ? 'Pominięte (problemy z kolanami)' : 'Przysiady, Wypady, Hip Thrust';
+  return [
+    { day:'Pon', type:'Siłownia — Klatka + Triceps', tag:'gym', tagLabel:'Siłownia', exercises:'Wyciskanie sztangi, rozpiętki, triceps pushdown' },
+    { day:'Wt',  type:'Dom — Cardio + Core', tag:'home', tagLabel:'Dom', exercises:`Bieżnia 30 min interwał, ${coreNote}` },
+    { day:'Śr',  type:'Odpoczynek aktywny', tag:'rest', tagLabel:'Odpoczynek', exercises:'Spacer, rozciąganie, mobilizacja kręgosłupa' },
+    { day:'Czw', type:'Siłownia — Plecy + Biceps', tag:'gym', tagLabel:'Siłownia', exercises:'Wiosłowanie, wyciąg górny, uginanie ramion' },
+    { day:'Pt',  type:'Dom — Góra ciała', tag:'home', tagLabel:'Dom', exercises:'Pompki, dips na krześle, Pike push-ups' },
+    { day:'Sob', type:'Odpoczynek / Sport', tag:'rest', tagLabel:'Opcjonalnie', exercises:'Basen, rower, joga — według wyboru' },
+    { day:'Nd',  type:'Pełna regeneracja', tag:'rest', tagLabel:'Odpoczynek', exercises:'Odpoczynek — mięśnie rosną podczas regeneracji' },
+  ];
+}
+
+function buildDiet(kcal, goal) {
+  const hi = kcal > 2200;
+  return [
+    { title:'Makaron + Owsianka + Skyr', kcal, meals:[
+      {type:'Śniadanie', name:'Owsianka nocna z skyrem i bananem', items:'Płatki owsiane 80g · Skyr 150g · Banan · Miód · Cynamon', kcal:Math.round(kcal*0.23)},
+      {type:'Obiad', name:'Spaghetti bolognese z indykiem', items:'Makaron 90g · Mięso mielone z indyka 200g · Passata · Czosnek · Bazylia', kcal:Math.round(kcal*0.40)},
+      {type:'Kolacja', name:'Skyr z granolą i owocami', items:'Skyr naturalny 300g · Granola 40g · Maliny mrożone · Miód', kcal:Math.round(kcal*0.22)},
+    ]},
+    { title:'Kurczak + Shake + Ziemniaki', kcal, meals:[
+      {type:'Śniadanie', name:'Shake proteinowy ze skyrem', items:'Skyr 200g · Mleko 200ml · Banan · Kakao · Płatki owsiane 30g', kcal:Math.round(kcal*0.22)},
+      {type:'Obiad', name:'Pieczone ziemniaki z kurczakiem i warzywami', items:'Pierś z kurczaka 200g · Ziemniaki 300g · Brokuły · Oliwa · Rozmaryn', kcal:Math.round(kcal*0.40)},
+      {type:'Kolacja', name:'Kanapki z twarogiem i wędliną', items:'Chleb razowy 3 kromki · Twaróg 150g · Wędlina drobiowa · Pomidor · Ogórek', kcal:Math.round(kcal*0.22)},
+    ]},
+    { title:'Łosoś + Pancakes + Quesadilla', kcal, meals:[
+      {type:'Śniadanie', name:'Pancakes owsiane ze skyrem', items:'Mąka owsiana 80g · Skyr 100g · Jajko · Mleko · Banan jako topping', kcal:Math.round(kcal*0.24)},
+      {type:'Obiad', name:'Makaron z łososiem i szpinakiem', items:'Makaron penne 100g · Łosoś z puszki 200g · Szpinak · Śmietana 12% · Czosnek', kcal:Math.round(kcal*0.40)},
+      {type:'Kolacja', name:'Skyr z jabłkiem i orzechami', items:'Skyr naturalny 250g · Jabłko · Orzechy włoskie 15g · Cynamon · Miód', kcal:Math.round(kcal*0.22)},
+    ]},
+  ];
+}
+
+// ═══════════════════════════════════════════
+// FAMILY
+// ═══════════════════════════════════════════
+function openAddModal() {
+  document.getElementById('add-modal').classList.add('show');
+  document.getElementById('m-name').focus();
+}
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('show');
+  ['m-name','m-age','m-height','m-weight'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+}
+
+function addMember() {
+  const name   = document.getElementById('m-name').value || 'Osoba';
+  const age    = parseInt(document.getElementById('m-age').value) || 30;
+  const sex    = document.getElementById('m-sex').value;
+  const height = parseFloat(document.getElementById('m-height').value);
+  const weight = parseFloat(document.getElementById('m-weight').value);
+  const goal   = document.getElementById('m-goal').value;
+  const act    = document.getElementById('m-activity').value;
+  if(!height || !weight) { alert('Wpisz wzrost i wagę'); return; }
+  const bmi  = weight / ((height/100)**2);
+  const kcal = calcKcal(weight, height, age, sex, act, goal);
+  const protein = Math.round(weight * 1.8);
+  familyMembers.push({ id:Date.now(), name, age, sex, height, weight, goal, activity:act, bmi:bmi.toFixed(1), kcal, protein });
+  try { localStorage.setItem('family-members', JSON.stringify(familyMembers)); } catch(e) {}
+  closeAddModal();
+  renderFamily();
+}
+
+function removeMember(id) {
+  if(!confirm('Usunąć tę osobę?')) return;
+  familyMembers = familyMembers.filter(m => m.id !== id);
+  try { localStorage.setItem('family-members', JSON.stringify(familyMembers)); } catch(e) {}
+  renderFamily();
+}
+
+const goalLabels = {reduce:'Redukcja', maintain:'Utrzymanie', gain:'Przyrost'};
+const avatarMap  = {m:'🧑', f:'👩'};
+const bmiLabel   = bmi => bmi < 18.5 ? 'Niedowaga' : bmi < 25 ? 'Prawidłowa' : bmi < 30 ? 'Nadwaga' : 'Otyłość';
+
+function renderFamily() {
+  const list = document.getElementById('family-members-list');
+  if(!familyMembers.length) {
+    list.innerHTML = `<div class="family-empty"><div class="family-empty-icon">👨‍👩‍👧</div><div class="family-empty-title">Brak członków rodziny</div><div class="family-empty-sub">Naciśnij "+ Dodaj" aby dodać pierwszą osobę</div></div>`;
+    document.getElementById('family-total').classList.remove('show');
+    return;
+  }
+  list.innerHTML = familyMembers.map(m => `
+    <div class="member-card">
+      <div class="member-head">
+        <div class="member-avatar">${avatarMap[m.sex]||'🧑'}</div>
+        <div>
+          <div class="member-name">${m.name}</div>
+          <div class="member-role">${m.age} lat · ${goalLabels[m.goal]||m.goal}</div>
+        </div>
+        <div class="member-bmi-badge">BMI ${m.bmi}</div>
+      </div>
+      <div class="member-stats">
+        <div class="member-stat"><div class="member-stat-val">${m.kcal}</div><div class="member-stat-lbl">kcal/dzień</div></div>
+        <div class="member-stat"><div class="member-stat-val">${m.protein}g</div><div class="member-stat-lbl">Białko</div></div>
+        <div class="member-stat"><div class="member-stat-val">${bmiLabel(parseFloat(m.bmi))}</div><div class="member-stat-lbl">Kategoria</div></div>
+      </div>
+      <div class="member-actions">
+        <button class="member-action-btn danger" onclick="removeMember(${m.id})">Usuń</button>
+      </div>
+    </div>`).join('');
+
+  // Total
+  const totalKcal    = familyMembers.reduce((s,m) => s + m.kcal, 0);
+  const totalProtein = familyMembers.reduce((s,m) => s + m.protein, 0);
+  document.getElementById('ft-kcal').textContent    = totalKcal + ' kcal';
+  document.getElementById('ft-protein').textContent = totalProtein + ' g';
+  document.getElementById('ft-count').textContent   = familyMembers.length + ' osób';
+  document.getElementById('family-total').classList.add('show');
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderFamily();
+  // Close modal on backdrop click
+  document.getElementById('add-modal').addEventListener('click', e => {
+    if(e.target === document.getElementById('add-modal')) closeAddModal();
+  });
+});
+</script>
+</body>
+</html>
