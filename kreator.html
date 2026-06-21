@@ -353,9 +353,10 @@ function wizBack() {
 function wizNext() {
   if(!stepValid()) return;
   saveStep();
-  if(cur===3 && ans.training==='no') cur=5; // skip step 4
-  else if(cur===TOTAL) { savePerson(); return; }
-  else cur++;
+  if(cur===TOTAL) { savePerson(); return; }
+  if(cur===3 && ans.training==='no') { cur=5; }
+  else if(cur===5 && ans.training==='no') { savePerson(); return; }
+  else { cur++; }
   updateWizUI();
 }
 
@@ -391,8 +392,8 @@ function savePerson() {
   const kcal = calcKcal(ans.weight,ans.height,ans.age,ans.sex,1.375,ans.goal);
   people.push({...ans, id:Date.now(), bmi:parseFloat(bmi.toFixed(1)), kcal, protein:Math.round(ans.weight*1.8)});
   localStorage.setItem('kreator-people', JSON.stringify(people));
-  showPage('pg-landing');
-  renderLanding();
+  // Przejdź od razu do planu
+  window.location.href = 'plan.html';
 }
 
 function updateWizUI() {
